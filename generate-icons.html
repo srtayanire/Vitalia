@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>* { margin: 0; padding: 0; } body { background: #fdf8f6; }</style>
+</head>
+<body>
+<canvas id="c192" width="192" height="192"></canvas>
+<canvas id="c512" width="512" height="512"></canvas>
+<script>
+function drawIcon(canvas, size) {
+  const ctx = canvas.getContext('2d');
+  const s = size / 120;
+  ctx.scale(s, s);
+
+  // Background
+  const bg = ctx.createRadialGradient(60, 60, 0, 60, 60, 85);
+  bg.addColorStop(0, '#f9e4e8');
+  bg.addColorStop(1, '#f0c8d0');
+  roundRect(ctx, 0, 0, 120, 120, 28, bg);
+
+  // Petals
+  const petalColors = ['#e8a0b0', '#e8a0b0', '#d4788a', '#d4788a', '#eab0be', '#eab0be', '#eab0be', '#eab0be'];
+  const petals = [
+    [60, 32, 11, 20, 0],
+    [60, 88, 11, 20, 0],
+    [32, 60, 20, 11, 0],
+    [88, 60, 20, 11, 0],
+    [38, 38, 11, 20, -45],
+    [82, 38, 11, 20, 45],
+    [38, 82, 11, 20, 45],
+    [82, 82, 11, 20, -45],
+  ];
+  petals.forEach(([cx, cy, rx, ry, angle], i) => {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.globalAlpha = i < 4 ? 0.9 : 0.8;
+    ctx.fillStyle = petalColors[i];
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Center gradient
+  ctx.globalAlpha = 1;
+  const centerGrad = ctx.createRadialGradient(57, 57, 0, 60, 60, 16);
+  centerGrad.addColorStop(0, '#e8849a');
+  centerGrad.addColorStop(1, '#c4606f');
+  ctx.fillStyle = centerGrad;
+  ctx.beginPath();
+  ctx.arc(60, 60, 16, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Center highlight
+  ctx.fillStyle = 'rgba(245,224,228,0.6)';
+  ctx.beginPath();
+  ctx.arc(60, 60, 8, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function roundRect(ctx, x, y, w, h, r, fill) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+}
+
+drawIcon(document.getElementById('c192'), 192);
+drawIcon(document.getElementById('c512'), 512);
+
+// Download both
+setTimeout(() => {
+  ['c192', 'c512'].forEach(id => {
+    const canvas = document.getElementById(id);
+    const size = id === 'c192' ? 192 : 512;
+    const a = document.createElement('a');
+    a.download = `icon-${size}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+}, 500);
+</script>
+</body>
+</html>
