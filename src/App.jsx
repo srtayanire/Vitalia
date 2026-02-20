@@ -1576,41 +1576,6 @@ export default function App() {
 
     const total = allEntries.length;
 
-    function countByIndex(field, opts) {
-      const counts = {};
-      allEntries.forEach(({ data }) => {
-        const idx = data[field];
-        if (idx !== null && idx !== undefined) {
-          const label = opts[idx] || idx;
-          counts[label] = (counts[label] || 0) + 1;
-        }
-      });
-      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    }
-
-    const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
-    const humorStats = (() => {
-      const counts = {};
-      allEntries.forEach(({ data }) => {
-        if (data.humor !== null && data.humor !== undefined) {
-          const label = HUMOR_EMOJIS[data.humor] ? `${HUMOR_EMOJIS[data.humor]} ${t.humorOpts[data.humor]?.split(" ").slice(1).join(" ") || ""}`.trim() : t.humorOpts[data.humor];
-          if (label) counts[label] = (counts[label] || 0) + 1;
-        }
-      });
-      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    })();
-
-    const dolorStats = countByIndex("dolor", t.dolorOpts).filter(([v]) => v !== t.dolorOpts[0]);
-    const energiaStats = countByIndex("energia", t.energiaOpts);
-    const flujoStats = countByIndex("flujo", t.flujoOpts).filter(([v]) => v !== t.flujoOpts[0]);
-    const contraStats = countByIndex("contra", t.contraOpts);
-    const sexStats = countByIndex("sex", t.sexOpts).filter(([v]) => v !== t.sexOpts[0]);
-    const itsStats = countByIndex("its", t.itsOpts).filter(([v]) => v !== t.itsOpts[0]);
-    const enfermedadStats = countByIndex("enfermedad", t.enfermedadOpts).filter(([v]) => v !== t.enfermedadOpts[0]);
-
-    const firstDate = allEntries.length > 0 ? allEntries[0].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
-    const lastDate = allEntries.length > 0 ? allEntries[allEntries.length-1].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
-
     function StatBar({ label, dates, color }) {
       const [expanded, setExpanded] = useState(false);
       return (
@@ -1656,7 +1621,6 @@ export default function App() {
       return Object.entries(map).sort((a, b) => b[1].length - a[1].length);
     }
 
-    const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
     const humorMap = {};
     allEntries.forEach(({ date, data }) => {
       if (data.humor === null || data.humor === undefined) return;
