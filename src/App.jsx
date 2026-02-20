@@ -780,21 +780,26 @@ const ASC_MEANINGS = [
 function CycleWheel({ entries, cycleLength, today, t, lang, activePeriod, phaseInfo }) {
   const SIZE = 260, CX = 130, CY = 130, R = 108, TRACK = 22;
 
-  // Día actual del ciclo (1-based). Si no hay datos, null.
-  const currentDay = phaseInfo ? phaseInfo.dayOfCycle : null;
+  const currentDay = phaseInfo ? phaseInfo.dayOfCycle : 1;
+  const ovulationDay = Math.max(1, cycleLength - 14);
+  const fertileStart = Math.max(1, ovulationDay - 2);
+  const fertileEnd = Math.min(cycleLength, ovulationDay + 1);
 
-  // Última fecha de inicio de regla
   const lastStart = entries.length > 0
     ? new Date([...entries].sort((a, b) => new Date(a.start) - new Date(b.start)).at(-1).start)
     : null;
 
-  // Días de ovulación: días 13,14,15 del ciclo (simplificado)
-  const ovulationDay = Math.round(cycleLength - 14); // típicamente día 14 en ciclo 28
-  const fertileStart = ovulationDay - 2;
-  const fertileEnd = ovulationDay + 1;
+  // Estado de la bolita arrastrable
+  const [dragDay, setDragDay] = useState(null); // null = en posición real
+  const [isDragging, setIsDragging] = useState(false);
+  const ref = useRef(null);
+  const snapRef = useRef(null);
 
-  // Convertir día del ciclo a ángulo (día 1 = parte superior = -90°)
+  // El día que se muestra (real o arrastrado)
+  const displayDay = dragDay !== null ? dragDay : currentDay;
+
   function dayToAngle(day) {
+    // Día 1 arriba (270° en coordenadas estándar = -90°)
     return ((day - 1) / cycleLength) * 360 - 90;
   }
 
@@ -803,135 +808,178 @@ function CycleWheel({ entries, cycleLength, today, t, lang, activePeriod, phaseI
     return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
   }
 
-  // Arco SVG entre dos días (inclusive)
-  function arcBetweenDays(dayStart, dayEnd, r, thickness, color) {
-    const aStart = dayToAngle(dayStart);
-    const aEnd = dayToAngle(dayEnd + 1); // +1 para incluir el último día
-    const outerR = r, innerR = r - thickness;
-    const s = polarToXY(aStart, outerR), e = polarToXY(aEnd, outerR);
-    const si = polarToXY(aStart, innerR), ei = polarToXY(aEnd, innerR);
-    const large = (aEnd - aStart + 360) % 360 > 180 ? 1 : 0;
+  function angleToDayFromPos(clientX, clientY) {
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const angle = Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
+    // Convertir ángulo a día (día 1 = -90°)
+    const normalized = ((angle + 90) + 360) % 360;
+    const day = Math.round((normalized / 360) * cycleLength);
+    return day === 0 ? cycleLength : day;
+  }
+
+  function onPointerDown(e) {
+    e.preventDefault();
+    if (snapRef.current) clearTimeout(snapRef.current);
+    setIsDragging(true);
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    setDragDay(angleToDayFromPos(cx, cy));
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    setDragDay(angleToDayFromPos(cx, cy));
+  }
+
+  function onPointerUp() {
+    setIsDragging(false);
+    // Efecto "teléfono antiguo": rebota de vuelta al día real
+    snapRef.current = setTimeout(() => setDragDay(null), 600);
+  }
+
+  // Arco SVG entre dos ángulos
+  function arcSegment(dayS, dayE, r, thickness, color, key) {
+    const aS = dayToAngle(dayS), aE = dayToAngle(dayE + 1);
+    const or = r, ir = r - thickness;
+    const s = polarToXY(aS, or), e = polarToXY(aE, or);
+    const si = polarToXY(aS, ir), ei = polarToXY(aE, ir);
+    const span = ((aE - aS) + 360) % 360;
+    const lg = span > 180 ? 1 : 0;
     return (
-      <path
-        d={`M${s.x} ${s.y} A${outerR} ${outerR} 0 ${large} 1 ${e.x} ${e.y} L${ei.x} ${ei.y} A${innerR} ${innerR} 0 ${large} 0 ${si.x} ${si.y}Z`}
-        fill={color}
-      />
+      <path key={key}
+        d={`M${s.x} ${s.y} A${or} ${or} 0 ${lg} 1 ${e.x} ${e.y} L${ei.x} ${ei.y} A${ir} ${ir} 0 ${lg} 0 ${si.x} ${si.y}Z`}
+        fill={color} />
     );
   }
 
-  // Posición de la bolita del día actual
-  const dotAngle = currentDay ? dayToAngle(currentDay) : null;
-  const dotPos = dotAngle !== null ? polarToXY(dotAngle, R) : null;
+  // Posición actual de la bolita
+  const dotAngle = dayToAngle(displayDay);
+  const dotPos = polarToXY(dotAngle, R);
 
-  // Fecha de hoy formateada
-  const todayStr = today.toLocaleDateString(lang === "en" ? "en" : lang === "pt" ? "pt" : lang === "it" ? "it" : "es", { day: "numeric", month: "short" });
+  // Info del día mostrado
+  const isDisplayMens = displayDay <= 5;
+  const isDisplayOv = displayDay === ovulationDay;
+  const isDisplayFert = displayDay >= fertileStart && displayDay <= fertileEnd && !isDisplayOv;
 
-  // Fecha de ovulación
-  const ovDate = lastStart ? (() => { const d = new Date(lastStart); d.setDate(d.getDate() + ovulationDay - 1); return d; })() : null;
-  const ovDateStr = ovDate ? ovDate.toLocaleDateString(lang === "en" ? "en" : lang === "pt" ? "pt" : lang === "it" ? "it" : "es", { day: "numeric", month: "short" }) : null;
+  const displayColor = isDisplayMens ? "#c4606f" : isDisplayOv ? "#b85068" : isDisplayFert ? "#d4788a" : "#b07050";
+  const displayLabel = isDisplayOv
+    ? (lang==="en"?"Ovulation 🌸":lang==="pt"?"Ovulação 🌸":lang==="it"?"Ovulazione 🌸":"Ovulación 🌸")
+    : isDisplayFert
+    ? (lang==="en"?"Fertile days":lang==="pt"?"Dias férteis":lang==="it"?"Giorni fertili":"Días fértiles")
+    : isDisplayMens
+    ? (lang==="en"?"Period":lang==="pt"?"Menstruação":lang==="it"?"Mestruazione":"Regla")
+    : (lang==="en"?"Luteal phase":lang==="pt"?"Fase lútea":lang==="it"?"Fase luteale":"Fase lútea");
 
-  // Fase actual
-  const phase = phaseInfo?.phaseKey;
-  const phaseColor = phase === "menstruacion" ? "#c4606f" : phase === "ovulacion" ? "#d4788a" : phase === "folicular" ? "#e8a0aa" : "#b07050";
-  const phaseLabel = phaseInfo ? (t.phases?.[phase]?.nombre || phaseInfo.phase?.nombre || "") : (t.registerPeriod || "");
+  // Fecha del día mostrado
+  const displayDate = lastStart ? (() => {
+    const d = new Date(lastStart);
+    d.setDate(d.getDate() + displayDay - 1);
+    return d.toLocaleDateString(lang==="en"?"en":lang==="pt"?"pt":lang==="it"?"it":"es", { day: "numeric", month: "short" });
+  })() : null;
+
+  // Info del centro (días de regla o días hasta regla)
+  const centerNumber = activePeriod
+    ? (phaseInfo?.dayOfCycle ?? "—")
+    : (() => {
+        if (!lastStart) return "—";
+        const next = new Date(lastStart);
+        next.setDate(next.getDate() + cycleLength);
+        return Math.abs(Math.ceil((next - today) / 86400000));
+      })();
+
+  const centerLabel = activePeriod
+    ? (lang==="en"?"Day of period":lang==="pt"?"Dia da regra":lang==="it"?"Giorno ciclo":"Día de regla")
+    : (() => {
+        if (!lastStart) return lang==="en"?"Register your period":"Registra tu período";
+        const next = new Date(lastStart);
+        next.setDate(next.getDate() + cycleLength);
+        const diff = Math.ceil((next - today) / 86400000);
+        return diff >= 0
+          ? (lang==="en"?"days until period":lang==="pt"?"dias até a regra":lang==="it"?"giorni al ciclo":"días hasta la regla")
+          : (lang==="en"?"days late":lang==="pt"?"dias de atraso":lang==="it"?"giorni ritardo":"días de retraso");
+      })();
+
+  const todayStr = today.toLocaleDateString(lang==="en"?"en":lang==="pt"?"pt":lang==="it"?"it":"es", { day: "numeric", month: "short" });
+  const phaseColor = (phaseInfo?.phaseKey === "menstruacion") ? "#c4606f" : (phaseInfo?.phaseKey === "ovulacion") ? "#d4788a" : (phaseInfo?.phaseKey === "folicular") ? "#e8a0aa" : "#b07050";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-      <div style={{ position: "relative", width: SIZE, height: SIZE }}>
+      <div style={{ position: "relative", width: SIZE, height: SIZE, touchAction: "none", cursor: isDragging ? "grabbing" : "grab" }}
+        ref={ref}
+        onMouseDown={onPointerDown} onMouseMove={onPointerMove} onMouseUp={onPointerUp} onMouseLeave={onPointerUp}
+        onTouchStart={onPointerDown} onTouchMove={onPointerMove} onTouchEnd={onPointerUp}>
+
         <svg width={SIZE} height={SIZE}>
-          {/* Fondo del track completo */}
+          {/* Track base */}
           <circle cx={CX} cy={CY} r={R} fill="none" stroke="#f5e8ea" strokeWidth={TRACK} />
 
-          {/* Arco regla: días 1-5 */}
-          {arcBetweenDays(1, 5, R, TRACK, "#f2bec7")}
+          {/* Arcos por fase */}
+          {arcSegment(1, 5, R, TRACK, "#f5b8c4", "mens")}
+          {fertileStart > 6 && arcSegment(6, fertileStart - 1, R, TRACK, "#fceef0", "fol")}
+          {arcSegment(fertileStart, fertileEnd, R, TRACK, "#f9c8d8", "fert")}
+          {arcSegment(ovulationDay, ovulationDay, R, TRACK, "#e8849a", "ov")}
+          {fertileEnd < cycleLength && arcSegment(fertileEnd + 1, cycleLength, R, TRACK, "#f5e6d8", "lut")}
 
-          {/* Arco fase folicular: días 6 hasta fertileStart-1 */}
-          {fertileStart > 6 && arcBetweenDays(6, fertileStart - 1, R, TRACK, "#fceef0")}
+          {/* Marcas de días */}
+          {Array.from({ length: cycleLength }, (_, i) => i + 1)
+            .filter(d => d % 7 === 0 || d === 1 || d === ovulationDay)
+            .map(day => {
+              const p = polarToXY(dayToAngle(day), R - TRACK / 2 - 14);
+              return <text key={day} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle"
+                fontSize="9" fill="#a08090" fontWeight="700">{day}</text>;
+            })}
 
-          {/* Arco fértil: días fertileStart hasta fertileEnd */}
-          {arcBetweenDays(fertileStart, fertileEnd, R, TRACK, "#f9c8d8")}
-
-          {/* Arco ovulación: día ovulationDay */}
-          {arcBetweenDays(ovulationDay, ovulationDay, R, TRACK, "#d4788a")}
-
-          {/* Arco lútea: días fertileEnd+1 hasta cycleLength */}
-          {fertileEnd < cycleLength && arcBetweenDays(fertileEnd + 1, cycleLength, R, TRACK, "#f5e6d8")}
-
-          {/* Marcas de días cada 7 */}
-          {Array.from({ length: cycleLength }, (_, i) => i + 1).filter(d => d % 7 === 0 || d === 1).map(day => {
-            const angle = dayToAngle(day);
-            const inner = polarToXY(angle, R - TRACK / 2 - 14);
-            return (
-              <text key={day} x={inner.x} y={inner.y} textAnchor="middle" dominantBaseline="middle"
-                fontSize="10" fill="#a08090" fontWeight="700">{day}</text>
-            );
-          })}
-
-          {/* Emoji ovulación */}
-          {(() => { const p = polarToXY(dayToAngle(ovulationDay), R - TRACK/2 + 18); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="13">🌸</text>; })()}
-
-          {/* Emoji regla día 1 */}
-          {(() => { const p = polarToXY(dayToAngle(1), R - TRACK/2 + 18); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="11">🩸</text>; })()}
-
-          {/* Bolita del día actual */}
-          {dotPos && (
-            <>
-              <circle cx={dotPos.x} cy={dotPos.y} r={13} fill={phaseColor} opacity={0.25} />
-              <circle cx={dotPos.x} cy={dotPos.y} r={9} fill={phaseColor} />
-              <text x={dotPos.x} y={dotPos.y} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="white" fontWeight="800">
-                {currentDay}
-              </text>
-            </>
-          )}
+          {/* Emojis */}
+          {(() => { const p = polarToXY(dayToAngle(1), R + 4); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="11">🩸</text>; })()}
+          {(() => { const p = polarToXY(dayToAngle(ovulationDay), R + 4); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="12">🌸</text>; })()}
 
           {/* Centro blanco */}
           <circle cx={CX} cy={CY} r={R - TRACK - 6} fill="white" />
+
+          {/* Bolita arrastrable */}
+          <circle cx={dotPos.x} cy={dotPos.y} r={15} fill={isDragging ? displayColor : phaseColor} opacity={0.2}
+            style={{ transition: isDragging ? "none" : "cx 0.6s cubic-bezier(0.34,1.56,0.64,1), cy 0.6s cubic-bezier(0.34,1.56,0.64,1)" }} />
+          <circle cx={dotPos.x} cy={dotPos.y} r={10} fill={isDragging ? displayColor : phaseColor}
+            style={{ transition: isDragging ? "none" : "cx 0.6s cubic-bezier(0.34,1.56,0.64,1), cy 0.6s cubic-bezier(0.34,1.56,0.64,1)" }} />
+          <text x={dotPos.x} y={dotPos.y} textAnchor="middle" dominantBaseline="middle"
+            fontSize="8" fill="white" fontWeight="800"
+            style={{ transition: isDragging ? "none" : "x 0.6s cubic-bezier(0.34,1.56,0.64,1), y 0.6s cubic-bezier(0.34,1.56,0.64,1)" }}>
+            {displayDay}
+          </text>
         </svg>
 
-        {/* Texto central */}
+        {/* Texto central fijo */}
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", textAlign: "center", pointerEvents: "none", width: (R - TRACK - 6) * 2 - 16 }}>
-          {currentDay ? (
+          {lastStart || activePeriod ? (
             <>
-              <div style={{ fontSize: 36, fontWeight: 800, color: phaseColor, lineHeight: 1 }}>
-                {activePeriod
-                  ? (phaseInfo?.dayOfCycle ?? "—")
-                  : (() => {
-                      const lastS = entries.length > 0 ? new Date([...entries].sort((a,b) => new Date(a.start)-new Date(b.start)).at(-1).start) : null;
-                      if (!lastS) return "—";
-                      const next = new Date(lastS); next.setDate(next.getDate() + cycleLength);
-                      const diff = Math.ceil((next - today) / 86400000);
-                      return Math.abs(diff);
-                    })()
-                }
-              </div>
-              <div style={{ fontSize: 10, color: "#a89090", fontWeight: 600, marginTop: 2, lineHeight: 1.3 }}>
-                {activePeriod
-                  ? (lang==="en"?"Day of period":lang==="pt"?"Dia da regra":lang==="it"?"Giorno del ciclo":"Día de regla")
-                  : (() => {
-                      const lastS = entries.length > 0 ? new Date([...entries].sort((a,b) => new Date(a.start)-new Date(b.start)).at(-1).start) : null;
-                      if (!lastS) return "";
-                      const next = new Date(lastS); next.setDate(next.getDate() + cycleLength);
-                      const diff = Math.ceil((next - today) / 86400000);
-                      return diff >= 0
-                        ? (lang==="en"?"days until period":lang==="pt"?"dias até a regra":lang==="it"?"giorni al ciclo":"días hasta la regla")
-                        : (lang==="en"?"days late":lang==="pt"?"dias de atraso":lang==="it"?"giorni di ritardo":"días de retraso");
-                    })()
-                }
-              </div>
-              <div style={{ fontSize: 9, color: "#b8a8a8", marginTop: 3 }}>{todayStr}</div>
+              <div style={{ fontSize: 34, fontWeight: 800, color: phaseColor, lineHeight: 1 }}>{centerNumber}</div>
+              <div style={{ fontSize: 10, color: "#a89090", fontWeight: 600, marginTop: 3, lineHeight: 1.3 }}>{centerLabel}</div>
+              <div style={{ fontSize: 9, color: "#c8b8b8", marginTop: 3 }}>{todayStr}</div>
             </>
           ) : (
-            <div style={{ fontSize: 11, color: "#a89090", lineHeight: 1.4 }}>{t.registerPeriod}</div>
+            <div style={{ fontSize: 10, color: "#a89090", lineHeight: 1.4 }}>{t.registerPeriod}</div>
           )}
         </div>
       </div>
 
-      {/* Info ovulación debajo */}
-      {ovDateStr && (
-        <div style={{ fontSize: 11, color: "#d4788a", fontWeight: 600, textAlign: "center" }}>
-          🌸 {lang==="en"?"Ovulation approx.":lang==="pt"?"Ovulação aprox.":lang==="it"?"Ovulazione aprox.":"Ovulación aprox."} {ovDateStr}
-        </div>
-      )}
+      {/* Info del día que toca la bolita */}
+      <div style={{ minHeight: 32, textAlign: "center", transition: "all 0.3s" }}>
+        {isDragging || dragDay !== null ? (
+          <div style={{ fontSize: 12, color: displayColor, fontWeight: 700 }}>
+            {displayLabel}
+            {displayDate && <span style={{ color: "#a89090", fontWeight: 400, marginLeft: 6 }}>· {displayDate}</span>}
+          </div>
+        ) : (
+          <div style={{ fontSize: 10, color: "#c8b8b8" }}>
+            {lang==="en"?"Drag the dot to explore":lang==="pt"?"Arraste o ponto para explorar":lang==="it"?"Trascina il punto per esplorare":"Arrastra la bolita para explorar"}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
