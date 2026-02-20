@@ -35,7 +35,7 @@ const TRANSLATIONS = {
     hinchazonOpts: ["No","Sí"],
     statsTitle: "📊 Estadísticas", statsSubtitle: "Últimos 30 días",
     statsEmpty: "Aún no hay datos. Registra síntomas tocando días en el calendario.",
-    statsResumen: "📝 Resumen", statsResumenText: "Has registrado síntomas en", statsResumenText2: "días de los últimos 30.",
+    statsResumen: "📝 Resumen", statsResumenText: "Has registrado síntomas en", statsResumenText2: "días en total registrados.",
     statsDays: "días",
     settingsTitle: "⚙️ Ajustes", notifTitle: "🔔 Notificaciones",
     notifDesc: "Recibirás un aviso el día antes de tu período y cuando llegue tu día de ovulación.",
@@ -132,7 +132,7 @@ const TRANSLATIONS = {
     hinchazonOpts: ["No","Yes"],
     statsTitle: "📊 Statistics", statsSubtitle: "Last 30 days",
     statsEmpty: "No data yet. Log symptoms by tapping days in the calendar.",
-    statsResumen: "📝 Summary", statsResumenText: "You logged symptoms on", statsResumenText2: "of the last 30 days.",
+    statsResumen: "📝 Summary", statsResumenText: "You logged symptoms on", statsResumenText2: "days logged in total.",
     statsDays: "days",
     settingsTitle: "⚙️ Settings", notifTitle: "🔔 Notifications",
     notifDesc: "You'll get an alert the day before your period and on your ovulation day.",
@@ -230,7 +230,7 @@ const TRANSLATIONS = {
     hinchazonOpts: ["Não","Sim"],
     statsTitle: "📊 Estatísticas", statsSubtitle: "Últimos 30 dias",
     statsEmpty: "Ainda sem dados. Registe sintomas tocando nos dias do calendário.",
-    statsResumen: "📝 Resumo", statsResumenText: "Registou sintomas em", statsResumenText2: "dos últimos 30 dias.",
+    statsResumen: "📝 Resumo", statsResumenText: "Registou sintomas em", statsResumenText2: "dias registados no total.",
     statsDays: "dias",
     settingsTitle: "⚙️ Ajustes", notifTitle: "🔔 Notificações",
     notifDesc: "Receberá um aviso no dia antes da menstruação e no dia da ovulação.",
@@ -327,7 +327,7 @@ const TRANSLATIONS = {
     hinchazonOpts: ["No","Sì"],
     statsTitle: "📊 Statistiche", statsSubtitle: "Ultimi 30 giorni",
     statsEmpty: "Ancora nessun dato. Registra sintomi toccando i giorni nel calendario.",
-    statsResumen: "📝 Riepilogo", statsResumenText: "Hai registrato sintomi in", statsResumenText2: "degli ultimi 30 giorni.",
+    statsResumen: "📝 Riepilogo", statsResumenText: "Hai registrato sintomi in", statsResumenText2: "giorni registrati in totale.",
     statsDays: "giorni",
     settingsTitle: "⚙️ Impostazioni", notifTitle: "🔔 Notifiche",
     notifDesc: "Riceverai un avviso il giorno prima del ciclo e nel giorno dell'ovulazione.",
@@ -814,17 +814,30 @@ export default function App() {
   }
   function getDayEmoji(date) {
     const data = getSymptomsForDay(date);
+    // Humor — match by emoji prefix regardless of language
     if (data.humor) {
-      const map = { "😊 Feliz": "😊", "😤 Irritable": "😤", "😢 Triste": "😢", "😰 Ansiosa": "😰", "😐 Neutro": "😐" };
-      return map[data.humor] || null;
+      const e = data.humor.split(" ")[0];
+      if (["😊","😤","😢","😰","😐"].includes(e)) return e;
     }
+    // Energia — match by emoji prefix
     if (data.energia) {
-      const map = { "🔋 Alta": "🔋", "🔶 Media": "🔶", "🪫 Baja": "🪫" };
-      return map[data.energia] || null;
+      const e = data.energia.split(" ")[0];
+      if (["🔋","🔶","🪫"].includes(e)) return e;
     }
-    if (data.dolor && data.dolor !== "Ninguno") return "🩹";
-    if (data.hinchazon === "Sí") return "🫧";
-    if (data.flujo && data.flujo !== "Ninguno") return "💧";
+    // Dolor/Pain — check it's not "none" (always first option in all langs)
+    if (data.dolor && data.dolor !== t.dolorOpts[0]) return "🩹";
+    // Anticonceptivos
+    if (data.contra) return "💊";
+    // Relaciones sexuales — not "no" (always first option)
+    if (data.sex && data.sex !== t.sexOpts[0]) return "🫀";
+    // ITS
+    if (data.its && data.its !== t.itsOpts[0]) return "🦠";
+    // Enfermedad
+    if (data.enfermedad && data.enfermedad !== t.enfermedadOpts[0]) return "🤒";
+    // Hinchazon — "sí" is always second option
+    if (data.hinchazon === t.hinchazonOpts[1]) return "🫧";
+    // Flujo
+    if (data.flujo && data.flujo !== t.flujoOpts[0]) return "💧";
     return null;
   }
 
@@ -879,15 +892,30 @@ export default function App() {
 
   // ─── Onboarding ──────────────────────────────────────────────────────────────
   function OnboardingScreen() {
+    const [step, setStep] = useState(() => localStorage.getItem("onboarding-lang-done") ? "cycle" : "lang");
+
     function pressNum(n) {
-      setCycleInput(prev => {
-        const next = prev + n;
-        if (parseInt(next) > 45) return prev;
-        return next;
-      });
+      setCycleInput(prev => { const next = prev + n; if (parseInt(next) > 45) return prev; return next; });
       setCycleError("");
     }
     function pressDelete() { setCycleInput(prev => prev.slice(0, -1)); }
+
+    if (step === "lang") return (
+      <div style={S.onboarding}>
+        <div style={{ fontSize: 64, textAlign: "center" }}>🌸</div>
+        <h1 style={S.onboardingTitle}>Vitalia</h1>
+        <p style={{ ...S.onboardingText, marginBottom: 28 }}>Choose your language · Elige tu idioma</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%", maxWidth: 300 }}>
+          {[{code:"es", flag:"🇪🇸", name:"Español"}, {code:"en", flag:"🇬🇧", name:"English"}, {code:"pt", flag:"🇧🇷", name:"Português"}, {code:"it", flag:"🇮🇹", name:"Italiano"}].map(l => (
+            <button key={l.code} onClick={() => { setLang(l.code); localStorage.setItem("lang", l.code); localStorage.setItem("onboarding-lang-done", "1"); setStep("cycle"); }}
+              style={{ ...S.onboardingBtn, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, fontSize: 17, padding: "14px 20px",
+                background: lang === l.code ? "#c4606f" : "#fdf0f2", color: lang === l.code ? "#fff" : "#3d2c2c" }}>
+              <span style={{ fontSize: 24 }}>{l.flag}</span> {l.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
 
     return (
       <div style={S.onboarding}>
@@ -897,15 +925,10 @@ export default function App() {
         <p style={S.onboardingHint}>{t.cycleHint}</p>
         <div style={S.onboardingCard}>
           <label style={S.onboardingLabel}>{t.cycleQuestion}</label>
-
-          {/* Display */}
           <div style={{ fontSize: 52, fontWeight: 200, color: cycleInput ? "#c4606f" : "#d8c0c4", textAlign: "center", letterSpacing: -2, minHeight: 64, lineHeight: "64px" }}>
             {cycleInput || "—"}
           </div>
-
           {cycleError && <p style={{ color: "#ef4444", fontSize: 12, textAlign: "center" }}>{t.cycleError}</p>}
-
-          {/* Numeric pad */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, margin: "12px 0" }}>
             {["1","2","3","4","5","6","7","8","9","","0","⌫"].map((n, i) => (
               <button key={i} onClick={() => n === "⌫" ? pressDelete() : n ? pressNum(n) : null}
@@ -915,7 +938,6 @@ export default function App() {
               </button>
             ))}
           </div>
-
           <button onClick={handleCycleSubmit} style={S.onboardingBtn}>{t.continueBtn}</button>
           <button onClick={() => { setUserCycleLength(28); setEditingCycle(false); }} style={S.onboardingSkip}>{t.dontKnow}</button>
           {editingCycle && <button onClick={() => setEditingCycle(false)} style={S.onboardingSkip}>{t.cancel}</button>}
@@ -1424,10 +1446,6 @@ export default function App() {
 
         {ovToday && <div style={S.ovBadge}><FlowerIcon fertility={ovToday.fertility} /><span style={{ marginLeft: 8 }}>{ovToday.fertility === 1 ? t.ovulationDay : t.fertilDay}</span></div>}
 
-        <div style={S.cycleInfoRow}>
-          <span style={S.cycleInfoText}>{realCycle ? `📊 ${t.realCycle}: ${realCycle} días` : `⚙️ ${t.configCycle}: ${cycleLength} días`}</span>
-          <button onClick={() => { setCycleInput(String(cycleLength)); setEditingCycle(true); }} style={S.cycleEditBtn}>{t.change}</button>
-        </div>
         <HormoneSection />
       </div>
     );
@@ -1435,31 +1453,39 @@ export default function App() {
 
   // ─── Estadísticas ─────────────────────────────────────────────────────────────
   function StatsScreen() {
-    // Últimos 30 días con síntomas
-    const last30 = [];
-    for (let i = 29; i >= 0; i--) last30.push(addDays(today, -i));
+    // TODOS los días con síntomas registrados
+    const allEntries = Object.entries(symptoms)
+      .filter(([, data]) => Object.keys(data).length > 0)
+      .map(([dateKey, data]) => ({ date: new Date(dateKey), data }))
+      .sort((a, b) => a.date - b.date);
 
-    const entries30 = last30.map(d => ({ date: d, data: getSymptomsForDay(d) })).filter(e => Object.keys(e.data).length > 0);
-    const total = entries30.length;
+    const total = allEntries.length;
 
     function countByValue(field) {
       const counts = {};
-      entries30.forEach(({ data }) => { if (data[field]) counts[data[field]] = (counts[data[field]] || 0) + 1; });
+      allEntries.forEach(({ data }) => { if (data[field]) counts[data[field]] = (counts[data[field]] || 0) + 1; });
       return Object.entries(counts).sort((a, b) => b[1] - a[1]);
     }
 
     const humorStats = countByValue("humor");
-    const dolorStats = countByValue("dolor");
+    const dolorStats = countByValue("dolor").filter(([v]) => v !== t.dolorOpts[0]);
     const energiaStats = countByValue("energia");
-    const flujoStats = countByValue("flujo");
-    const hinchazonSi = entries30.filter(e => e.data.hinchazon === "Sí").length;
+    const flujoStats = countByValue("flujo").filter(([v]) => v !== t.flujoOpts[0]);
+    const hinchazonSi = allEntries.filter(e => e.data.hinchazon === t.hinchazonOpts[1]).length;
+    const contraStats = countByValue("contra");
+    const sexStats = countByValue("sex").filter(([v]) => v !== t.sexOpts[0]);
+    const itsStats = countByValue("its").filter(([v]) => v !== t.itsOpts[0]);
+    const enfermedadStats = countByValue("enfermedad").filter(([v]) => v !== t.enfermedadOpts[0]);
+
+    const firstDate = allEntries.length > 0 ? allEntries[0].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
+    const lastDate = allEntries.length > 0 ? allEntries[allEntries.length-1].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
 
     function StatBar({ label, count, max, color }) {
       return (
         <div style={{ marginBottom: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
             <span style={{ fontSize: 12, color: "#3d2c2c" }}>{label}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#c4606f" }}>{count} días</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#c4606f" }}>{count} {t.statsDays}</span>
           </div>
           <div style={{ background: "#f9f0f1", borderRadius: 99, height: 8 }}>
             <div style={{ width: max > 0 ? `${(count / max) * 100}%` : "0%", height: "100%", background: color || "#d4788a", borderRadius: 99, transition: "width 0.5s" }} />
@@ -1472,7 +1498,6 @@ export default function App() {
       <div style={{ ...S.horScreen, paddingBottom: 80 }}>
         <div style={S.horHeader}>
           <span style={S.appName}>{t.statsTitle}</span>
-          <span style={{ fontSize: 12, color: "#a89090" }}>{t.statsSubtitle}</span>
         </div>
 
         {total === 0 ? (
@@ -1484,56 +1509,64 @@ export default function App() {
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={S.statCard}>
               <div style={S.statTitle}>{t.statsResumen}</div>
-              <p style={{ fontSize: 13, color: "#a89090", marginTop: 6 }}>{t.statsResumenText} <span style={{ fontWeight: 700, color: "#c4606f" }}>{total} {t.statsDays}</span> {t.statsResumenText2}</p>
+              <p style={{ fontSize: 13, color: "#a89090", marginTop: 6 }}>
+                {t.statsResumenText} <span style={{ fontWeight: 700, color: "#c4606f" }}>{total} {t.statsDays}</span> {t.statsResumenText2}
+              </p>
+              {firstDate && <p style={{ fontSize: 11, color: "#b8a8a8", marginTop: 4 }}>📅 {firstDate} → {lastDate}</p>}
             </div>
+
             {humorStats.length > 0 && (
               <div style={S.statCard}>
                 <div style={S.statTitle}>{t.humor}</div>
-                <div style={{ marginTop: 12 }}>
-                  {humorStats.map(([val, count]) => (
-                    <StatBar key={val} label={val} count={count} max={total} color="#d4788a" />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Dolor */}
-            {dolorStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>🩹 Dolor</div>
-                <div style={{ marginTop: 12 }}>
-                  {dolorStats.map(([val, count]) => (
-                    <StatBar key={val} label={val} count={count} max={total} color="#c4606f" />
-                  ))}
-                </div>
+                <div style={{ marginTop: 12 }}>{humorStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#d4788a" />)}</div>
               </div>
             )}
             {energiaStats.length > 0 && (
               <div style={S.statCard}>
                 <div style={S.statTitle}>{t.energia}</div>
-                <div style={{ marginTop: 12 }}>
-                  {energiaStats.map(([val, count]) => (
-                    <StatBar key={val} label={val} count={count} max={total} color="#b07050" />
-                  ))}
-                </div>
+                <div style={{ marginTop: 12 }}>{energiaStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#b07050" />)}</div>
+              </div>
+            )}
+            {dolorStats.length > 0 && (
+              <div style={S.statCard}>
+                <div style={S.statTitle}>{t.dolor}</div>
+                <div style={{ marginTop: 12 }}>{dolorStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#c4606f" />)}</div>
               </div>
             )}
             {flujoStats.length > 0 && (
               <div style={S.statCard}>
                 <div style={S.statTitle}>{t.flujo}</div>
-                <div style={{ marginTop: 12 }}>
-                  {flujoStats.map(([val, count]) => (
-                    <StatBar key={val} label={val} count={count} max={total} color="#8a9ec4" />
-                  ))}
-                </div>
+                <div style={{ marginTop: 12 }}>{flujoStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a9ec4" />)}</div>
               </div>
             )}
             {hinchazonSi > 0 && (
               <div style={S.statCard}>
                 <div style={S.statTitle}>{t.hinchazon}</div>
-                <div style={{ marginTop: 12 }}>
-                  <StatBar label={t.hinchazon} count={hinchazonSi} max={total} color="#c4a0c4" />
-                </div>
+                <div style={{ marginTop: 12 }}><StatBar label={t.hinchazonOpts[1]} count={hinchazonSi} max={total} color="#c4a0c4" /></div>
+              </div>
+            )}
+            {contraStats.length > 0 && (
+              <div style={S.statCard}>
+                <div style={S.statTitle}>{t.contraLabel}</div>
+                <div style={{ marginTop: 12 }}>{contraStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a6090" />)}</div>
+              </div>
+            )}
+            {sexStats.length > 0 && (
+              <div style={S.statCard}>
+                <div style={S.statTitle}>{t.sexLabel}</div>
+                <div style={{ marginTop: 12 }}>{sexStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#b07080" />)}</div>
+              </div>
+            )}
+            {enfermedadStats.length > 0 && (
+              <div style={S.statCard}>
+                <div style={S.statTitle}>{t.enfermedadLabel}</div>
+                <div style={{ marginTop: 12 }}>{enfermedadStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#7a9e7e" />)}</div>
+              </div>
+            )}
+            {itsStats.length > 0 && (
+              <div style={S.statCard}>
+                <div style={S.statTitle}>{t.itsLabel}</div>
+                <div style={{ marginTop: 12 }}>{itsStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a7e9e" />)}</div>
               </div>
             )}
           </div>
