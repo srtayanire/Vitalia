@@ -565,6 +565,16 @@ export default function App() {
 
   // ─── Onboarding ──────────────────────────────────────────────────────────────
   function OnboardingScreen() {
+    function pressNum(n) {
+      setCycleInput(prev => {
+        const next = prev + n;
+        if (parseInt(next) > 45) return prev;
+        return next;
+      });
+      setCycleError("");
+    }
+    function pressDelete() { setCycleInput(prev => prev.slice(0, -1)); }
+
     return (
       <div style={S.onboarding}>
         <div style={{ fontSize: 64, textAlign: "center" }}>🌸</div>
@@ -573,8 +583,25 @@ export default function App() {
         <p style={S.onboardingHint}>{t.cycleHint}</p>
         <div style={S.onboardingCard}>
           <label style={S.onboardingLabel}>{t.cycleQuestion}</label>
-          <input type="tel" inputMode="numeric" pattern="[0-9]*" value={cycleInput} onChange={e => { setCycleInput(e.target.value.replace(/[^0-9]/g, '')); setCycleError(""); }} onKeyDown={e => e.key === "Enter" && handleCycleSubmit()} placeholder={t.cyclePlaceholder} style={S.onboardingInput} />
-          {cycleError && <p style={{ color: "#ef4444", fontSize: 12 }}>{t.cycleError}</p>}
+
+          {/* Display */}
+          <div style={{ fontSize: 52, fontWeight: 200, color: cycleInput ? "#c4606f" : "#d8c0c4", textAlign: "center", letterSpacing: -2, minHeight: 64, lineHeight: "64px" }}>
+            {cycleInput || "—"}
+          </div>
+
+          {cycleError && <p style={{ color: "#ef4444", fontSize: 12, textAlign: "center" }}>{t.cycleError}</p>}
+
+          {/* Numeric pad */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, margin: "12px 0" }}>
+            {["1","2","3","4","5","6","7","8","9","","0","⌫"].map((n, i) => (
+              <button key={i} onClick={() => n === "⌫" ? pressDelete() : n ? pressNum(n) : null}
+                style={{ ...S.numBtn, opacity: n === "" ? 0 : 1, pointerEvents: n === "" ? "none" : "auto",
+                  background: n === "⌫" ? "#f9d8e0" : "#fdf0f2", color: n === "⌫" ? "#c4606f" : "#3d2c2c" }}>
+                {n}
+              </button>
+            ))}
+          </div>
+
           <button onClick={handleCycleSubmit} style={S.onboardingBtn}>{t.continueBtn}</button>
           <button onClick={() => { setUserCycleLength(28); setEditingCycle(false); }} style={S.onboardingSkip}>{t.dontKnow}</button>
           {editingCycle && <button onClick={() => setEditingCycle(false)} style={S.onboardingSkip}>{t.cancel}</button>}
@@ -1211,6 +1238,7 @@ const S = {
   symptomLabel: { fontSize: 12, fontWeight: 700, color: "#3d2c2c", marginBottom: 8 },
   chipRow: { display: "flex", flexWrap: "wrap", gap: 8 },
   chip: { border: "none", borderRadius: 20, padding: "7px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" },
+  numBtn: { border: "none", borderRadius: 16, padding: "16px", fontSize: 20, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", transition: "all 0.1s", textAlign: "center" },
   statCard: { background: "white", borderRadius: 20, padding: 18, border: "1px solid #f2dde1", boxShadow: "0 2px 10px rgba(212,120,138,0.07)" },
   statTitle: { fontSize: 14, fontWeight: 700, color: "#c4606f" },
 };
