@@ -70,6 +70,40 @@ const TRANSLATIONS = {
     horFooter: "Basado en posiciones astronómicas reales calculadas para hoy",
     horChange: "Cambiar",
     signs: ["Aries","Tauro","Géminis","Cáncer","Leo","Virgo","Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"],
+    horTabs: ["🧪 Hormonas","💪 Físico","💜 Emocional","✨ Consejos"],
+    horTabIds: ["hormonas","fisico","emocional","consejos"],
+    horFisicoLabel: "Síntomas físicos más probables ahora:", horEmocionalLabel: "Cómo puedes sentirte emocionalmente:",
+    horAlimLabel: "🥗 Alimentación", horEjercLabel: "🏃 Ejercicio",
+    horDisclaimer: "Estimación basada en tu ciclo. No sustituye a un análisis médico.",
+    horDayOf: "Día", horDayOfCycle: "de tu ciclo",
+    contraLabel: "💊 Anticonceptivos", contraOpts: ["Pastilla","Anillo","DIU","Parche","Implante","Condón","Otro"],
+    contraTomada: "💊 Pastilla tomada hoy", contraHora: "Hora:",
+    sexLabel: "🫀 Relaciones sexuales", sexOpts: ["No","Sí con protección","Sí sin protección"],
+    enfermedadLabel: "🤒 Salud general", enfermedadOpts: ["Ninguna","Resfriado","Fiebre","Dolor fuerte de cabeza","Náuseas","Infección","Otro"],
+    pillReminderTitle: "💊 Recordatorio pastilla", pillReminderDesc: "Recibirás una notificación diaria a la hora que elijas.",
+    pillReminderTime: "Hora del recordatorio:", pillReminderOn: "Recordatorio activado ✓", pillReminderBtn: "Activar recordatorio",
+    phases: {
+      menstruacion: { nombre: "Menstruación", dias: "Días 1–5",
+        fisico: ["Cólicos y dolor abdominal","Fatiga y cansancio","Hinchazón","Posibles dolores de cabeza","Sensibilidad en pechos"],
+        emocional: ["Mayor sensibilidad emocional","Tendencia al aislamiento","Necesidad de descanso","Posible irritabilidad"],
+        alimentacion: ["Hierro: lentejas, espinacas, carnes rojas","Magnesio para los cólicos: chocolate negro, frutos secos","Evita la sal para reducir hinchazón","Infusiones de jengibre o manzanilla"],
+        ejercicio: ["Yoga suave o estiramientos","Paseos tranquilos","Escucha a tu cuerpo y descansa si lo necesitas"] },
+      folicular: { nombre: "Fase Folicular", dias: "Días 6–13",
+        fisico: ["Aumento de energía","Piel más luminosa","Mayor apetito sexual","Sensación de bienestar físico","Más fuerza muscular"],
+        emocional: ["Optimismo y buen humor","Mayor creatividad","Sociabilidad alta","Confianza en ti misma","Mente más clara y enfocada"],
+        alimentacion: ["Proteínas para apoyar la energía: huevos, legumbres","Verduras crucíferas: brócoli, coliflor","Semillas de lino (fitoestrógenos naturales)","Frutas frescas y coloridas"],
+        ejercicio: ["¡Momento ideal para entrenar fuerte!","Cardio, pesas, HIIT","Prueba actividades nuevas","Tu rendimiento estará en su mejor momento"] },
+      ovulacion: { nombre: "Ovulación", dias: "Día ~14",
+        fisico: ["Mayor flujo vaginal transparente y elástico","Leve dolor en un lado del abdomen","Temperatura basal ligeramente elevada","Mayor libido","Pechos más sensibles"],
+        emocional: ["Máxima confianza y atractivo","Muy sociable y comunicativa","Libido en su punto más alto","Energía y vitalidad máximas"],
+        alimentacion: ["Zinc: semillas de calabaza, mariscos","Antioxidantes: frutos rojos, tomate","Omega-3: salmón, nueces","Mantente muy hidratada"],
+        ejercicio: ["Aprovecha tu energía máxima","Deportes en equipo o actividades sociales","Entrena con intensidad alta","Baile, spinning, crossfit"] },
+      lutea: { nombre: "Fase Lútea", dias: "Días 15–28",
+        fisico: ["Hinchazón y retención de líquidos","Sensibilidad en pechos","Antojos especialmente de dulce","Posible acné","Fatiga en la segunda mitad"],
+        emocional: ["Mayor introspección","Posible síndrome premenstrual (SPM)","Irritabilidad o tristeza","Necesidad de orden y rutina","Ansiedad leve"],
+        alimentacion: ["Reduce azúcar y cafeína para el SPM","Calcio: lácteos, almendras, sésamo","Vitamina B6: plátano, pavo, patata","Chocolate negro con moderación"],
+        ejercicio: ["Yoga, pilates, natación suave","Reduce la intensidad si te sientes cansada","Paseos en la naturaleza","Ejercicios de respiración y meditación"] },
+    },
   },
   en: {
     appName: "Vitalia", welcome: "Welcome to Vitalia",
@@ -132,6 +166,41 @@ const TRANSLATIONS = {
     horFooter: "Based on real astronomical positions calculated for today",
     horChange: "Change",
     signs: ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"],
+    horTabs: ["🧪 Hormones","💪 Physical","💜 Emotional","✨ Tips"],
+    horTabIds: ["hormonas","fisico","emocional","consejos"],
+    horFisicoLabel: "Most likely physical symptoms now:", horEmocionalLabel: "How you may feel emotionally:",
+    horAlimLabel: "🥗 Nutrition", horEjercLabel: "🏃 Exercise",
+    horDisclaimer: "Estimate based on your cycle. Not a substitute for medical advice.",
+    horDayOf: "Day", horDayOfCycle: "of your cycle",
+    contraLabel: "💊 Contraceptives", contraOpts: ["Pill","Ring","IUD","Patch","Implant","Condom","Other"],
+    contraTomada: "💊 Pill taken today", contraHora: "Time:",
+    sexLabel: "🫀 Sexual activity", sexOpts: ["No","Yes with protection","Yes without protection"],
+    enfermedadLabel: "🤒 General health", enfermedadOpts: ["None","Cold","Fever","Severe headache","Nausea","Infection","Other"],
+    pillReminderTitle: "💊 Pill reminder", pillReminderDesc: "You'll receive a daily notification at the time you choose.",
+    pillReminderTime: "Reminder time:", pillReminderOn: "Reminder enabled ✓", pillReminderBtn: "Enable reminder",
+    horDayOf: "Day", horDayOfCycle: "of your cycle",
+    phases: {
+      menstruacion: { nombre: "Menstruation", dias: "Days 1–5",
+        fisico: ["Cramps and abdominal pain","Fatigue and tiredness","Bloating","Possible headaches","Breast tenderness"],
+        emocional: ["Greater emotional sensitivity","Tendency to withdraw","Need for rest","Possible irritability"],
+        alimentacion: ["Iron: lentils, spinach, red meat","Magnesium for cramps: dark chocolate, nuts","Avoid salt to reduce bloating","Ginger or chamomile tea"],
+        ejercicio: ["Gentle yoga or stretching","Light walks","Listen to your body and rest if needed"] },
+      folicular: { nombre: "Follicular Phase", dias: "Days 6–13",
+        fisico: ["Energy boost","Glowing skin","Higher sex drive","Sense of physical wellbeing","More muscle strength"],
+        emocional: ["Optimism and good mood","Greater creativity","High sociability","Confidence in yourself","Clearer and more focused mind"],
+        alimentacion: ["Proteins to support energy: eggs, legumes","Cruciferous vegetables: broccoli, cauliflower","Flax seeds (natural phytoestrogens)","Fresh colorful fruits"],
+        ejercicio: ["Perfect time to train hard!","Cardio, weights, HIIT","Try new activities","Your performance will be at its best"] },
+      ovulacion: { nombre: "Ovulation", dias: "Day ~14",
+        fisico: ["Clear stretchy vaginal discharge","Mild pain on one side of abdomen","Slightly elevated basal temperature","Higher libido","More sensitive breasts"],
+        emocional: ["Peak confidence and attractiveness","Very social and communicative","Libido at its highest","Maximum energy and vitality"],
+        alimentacion: ["Zinc: pumpkin seeds, seafood","Antioxidants: berries, tomato","Omega-3: salmon, walnuts","Stay very hydrated"],
+        ejercicio: ["Harness your peak energy","Team sports or social activities","Train at high intensity","Dance, spinning, crossfit"] },
+      lutea: { nombre: "Luteal Phase", dias: "Days 15–28",
+        fisico: ["Bloating and water retention","Breast tenderness","Cravings especially for sweets","Possible acne","Fatigue in the second half"],
+        emocional: ["Greater introspection","Possible premenstrual syndrome (PMS)","Irritability or sadness","Need for order and routine","Mild anxiety"],
+        alimentacion: ["Reduce sugar and caffeine for PMS","Calcium: dairy, almonds, sesame","Vitamin B6: banana, turkey, potato","Dark chocolate in moderation"],
+        ejercicio: ["Yoga, pilates, gentle swimming","Reduce intensity if you feel tired","Nature walks","Breathing exercises and meditation"] },
+    },
   },
   pt: {
     appName: "Vitalia", welcome: "Bem-vinda ao Vitalia",
@@ -194,6 +263,40 @@ const TRANSLATIONS = {
     horFooter: "Baseado em posições astronômicas reais calculadas para hoje",
     horChange: "Alterar",
     signs: ["Áries","Touro","Gémeos","Caranguejo","Leão","Virgem","Balança","Escorpião","Sagitário","Capricórnio","Aquário","Peixes"],
+    horTabs: ["🧪 Hormonas","💪 Físico","💜 Emocional","✨ Conselhos"],
+    horTabIds: ["hormonas","fisico","emocional","consejos"],
+    horFisicoLabel: "Sintomas físicos mais prováveis agora:", horEmocionalLabel: "Como pode sentir-se emocionalmente:",
+    horAlimLabel: "🥗 Alimentação", horEjercLabel: "🏃 Exercício",
+    horDisclaimer: "Estimativa baseada no seu ciclo. Não substitui aconselhamento médico.",
+    horDayOf: "Dia", horDayOfCycle: "do seu ciclo",
+    contraLabel: "💊 Anticoncepcionais", contraOpts: ["Pílula","Anel","DIU","Adesivo","Implante","Preservativo","Outro"],
+    contraTomada: "💊 Pílula tomada hoje", contraHora: "Hora:",
+    sexLabel: "🫀 Relações sexuais", sexOpts: ["Não","Sim com proteção","Sim sem proteção"],
+    enfermedadLabel: "🤒 Saúde geral", enfermedadOpts: ["Nenhuma","Constipação","Febre","Dor de cabeça forte","Náuseas","Infeção","Outro"],
+    pillReminderTitle: "💊 Lembrete da pílula", pillReminderDesc: "Receberá uma notificação diária à hora que escolher.",
+    pillReminderTime: "Hora do lembrete:", pillReminderOn: "Lembrete ativado ✓", pillReminderBtn: "Ativar lembrete",
+    phases: {
+      menstruacion: { nombre: "Menstruação", dias: "Dias 1–5",
+        fisico: ["Cólicas e dor abdominal","Fadiga e cansaço","Inchaço","Possíveis dores de cabeça","Sensibilidade nos seios"],
+        emocional: ["Maior sensibilidade emocional","Tendência ao isolamento","Necessidade de descanso","Possível irritabilidade"],
+        alimentacion: ["Ferro: lentilhas, espinafre, carne vermelha","Magnésio para cólicas: chocolate negro, frutos secos","Evite o sal para reduzir o inchaço","Infusões de gengibre ou camomila"],
+        ejercicio: ["Yoga suave ou alongamentos","Caminhadas tranquilas","Ouça o seu corpo e descanse se necessário"] },
+      folicular: { nombre: "Fase Folicular", dias: "Dias 6–13",
+        fisico: ["Aumento de energia","Pele mais luminosa","Maior apetite sexual","Sensação de bem-estar físico","Mais força muscular"],
+        emocional: ["Otimismo e bom humor","Maior criatividade","Alta sociabilidade","Confiança em si mesma","Mente mais clara e focada"],
+        alimentacion: ["Proteínas para apoiar a energia: ovos, leguminosas","Vegetais crucíferos: brócolis, couve-flor","Sementes de linhaça (fitoestrogênios naturais)","Frutas frescas e coloridas"],
+        ejercicio: ["Momento ideal para treinar forte!","Cardio, pesos, HIIT","Experimente atividades novas","O seu desempenho estará no seu melhor"] },
+      ovulacion: { nombre: "Ovulação", dias: "Dia ~14",
+        fisico: ["Corrimento vaginal transparente e elástico","Leve dor num lado do abdômen","Temperatura basal ligeiramente elevada","Maior libido","Seios mais sensíveis"],
+        emocional: ["Máxima confiança e atratividade","Muito sociável e comunicativa","Libido no seu ponto mais alto","Energia e vitalidade máximas"],
+        alimentacion: ["Zinco: sementes de abóbora, frutos do mar","Antioxidantes: frutos vermelhos, tomate","Ômega-3: salmão, nozes","Mantenha-se muito hidratada"],
+        ejercicio: ["Aproveite a sua energia máxima","Desportos em equipa ou atividades sociais","Treine com alta intensidade","Dança, spinning, crossfit"] },
+      lutea: { nombre: "Fase Lútea", dias: "Dias 15–28",
+        fisico: ["Inchaço e retenção de líquidos","Sensibilidade nos seios","Desejos especialmente por doces","Possível acne","Fadiga na segunda metade"],
+        emocional: ["Maior introspecção","Possível síndrome pré-menstrual (SPM)","Irritabilidade ou tristeza","Necessidade de ordem e rotina","Ansiedade leve"],
+        alimentacion: ["Reduza açúcar e cafeína para SPM","Cálcio: laticínios, amêndoas, sésamo","Vitamina B6: banana, peru, batata","Chocolate negro com moderação"],
+        ejercicio: ["Yoga, pilates, natação suave","Reduza a intensidade se se sentir cansada","Caminhadas na natureza","Exercícios de respiração e meditação"] },
+    },
   },
   it: {
     appName: "Vitalia", welcome: "Benvenuta in Vitalia",
@@ -256,6 +359,40 @@ const TRANSLATIONS = {
     horFooter: "Basato su posizioni astronomiche reali calcolate per oggi",
     horChange: "Cambia",
     signs: ["Ariete","Toro","Gemelli","Cancro","Leone","Vergine","Bilancia","Scorpione","Sagittario","Capricorno","Acquario","Pesci"],
+    horTabs: ["🧪 Ormoni","💪 Fisico","💜 Emotivo","✨ Consigli"],
+    horTabIds: ["hormonas","fisico","emocional","consejos"],
+    horFisicoLabel: "Sintomi fisici più probabili ora:", horEmocionalLabel: "Come potresti sentirti emotivamente:",
+    horAlimLabel: "🥗 Alimentazione", horEjercLabel: "🏃 Esercizio",
+    horDisclaimer: "Stima basata sul tuo ciclo. Non sostituisce un consulto medico.",
+    horDayOf: "Giorno", horDayOfCycle: "del tuo ciclo",
+    contraLabel: "💊 Contraccettivi", contraOpts: ["Pillola","Anello","IUD","Cerotto","Impianto","Preservativo","Altro"],
+    contraTomada: "💊 Pillola presa oggi", contraHora: "Ora:",
+    sexLabel: "🫀 Rapporti sessuali", sexOpts: ["No","Sì con protezione","Sì senza protezione"],
+    enfermedadLabel: "🤒 Salute generale", enfermedadOpts: ["Nessuna","Raffreddore","Febbre","Forte mal di testa","Nausea","Infezione","Altro"],
+    pillReminderTitle: "💊 Promemoria pillola", pillReminderDesc: "Riceverai una notifica giornaliera all'ora che scegli.",
+    pillReminderTime: "Ora del promemoria:", pillReminderOn: "Promemoria attivato ✓", pillReminderBtn: "Attiva promemoria",
+    phases: {
+      menstruacion: { nombre: "Mestruazione", dias: "Giorni 1–5",
+        fisico: ["Crampi e dolore addominale","Stanchezza e affaticamento","Gonfiore","Possibili mal di testa","Sensibilità al seno"],
+        emocional: ["Maggiore sensibilità emotiva","Tendenza all'isolamento","Bisogno di riposo","Possibile irritabilità"],
+        alimentacion: ["Ferro: lenticchie, spinaci, carne rossa","Magnesio per i crampi: cioccolato fondente, frutta secca","Evita il sale per ridurre il gonfiore","Tisane di zenzero o camomilla"],
+        ejercicio: ["Yoga dolce o stretching","Passeggiate tranquille","Ascolta il tuo corpo e riposati se ne hai bisogno"] },
+      folicular: { nombre: "Fase Follicolare", dias: "Giorni 6–13",
+        fisico: ["Aumento di energia","Pelle più luminosa","Maggiore appetito sessuale","Sensazione di benessere fisico","Più forza muscolare"],
+        emocional: ["Ottimismo e buon umore","Maggiore creatività","Alta socievolezza","Fiducia in te stessa","Mente più chiara e concentrata"],
+        alimentacion: ["Proteine per supportare l'energia: uova, legumi","Verdure crocifere: broccoli, cavolfiore","Semi di lino (fitoestrogeni naturali)","Frutta fresca e colorata"],
+        ejercicio: ["Momento ideale per allenarsi forte!","Cardio, pesi, HIIT","Prova nuove attività","Le tue prestazioni saranno al massimo"] },
+      ovulacion: { nombre: "Ovulazione", dias: "Giorno ~14",
+        fisico: ["Perdite vaginali trasparenti ed elastiche","Lieve dolore su un lato dell'addome","Temperatura basale leggermente elevata","Maggiore libido","Seno più sensibile"],
+        emocional: ["Massima fiducia e attrattività","Molto socievole e comunicativa","Libido al suo punto più alto","Energia e vitalità massime"],
+        alimentacion: ["Zinco: semi di zucca, frutti di mare","Antiossidanti: frutti di bosco, pomodoro","Omega-3: salmone, noci","Rimani molto idratata"],
+        ejercicio: ["Sfrutta la tua energia massima","Sport di squadra o attività sociali","Allenati ad alta intensità","Danza, spinning, crossfit"] },
+      lutea: { nombre: "Fase Luteale", dias: "Giorni 15–28",
+        fisico: ["Gonfiore e ritenzione idrica","Sensibilità al seno","Voglie specialmente di dolci","Possibile acne","Stanchezza nella seconda metà"],
+        emocional: ["Maggiore introspezione","Possibile sindrome premestruale (SPM)","Irritabilità o tristezza","Bisogno di ordine e routine","Leggera ansia"],
+        alimentacion: ["Riduci zucchero e caffeina per la SPM","Calcio: latticini, mandorle, sesamo","Vitamina B6: banana, tacchino, patata","Cioccolato fondente con moderazione"],
+        ejercicio: ["Yoga, pilates, nuoto dolce","Riduci l'intensità se ti senti stanca","Passeggiate nella natura","Esercizi di respirazione e meditazione"] },
+    },
   },
 };
 
@@ -641,8 +778,7 @@ export default function App() {
   const [symptoms, setSymptoms] = useState(() => {
     try { return JSON.parse(localStorage.getItem("symptoms") || "{}"); } catch { return {}; }
   });
-  const [birthData, setBirthData] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("birth-data") || "null"); } catch { return null; }
+  const [birthData, setBirthData] = useState(() => {    try { return JSON.parse(localStorage.getItem("birth-data") || "null"); } catch { return null; }
   });
   const [birthChart, setBirthChart] = useState(() => {
     try {
@@ -651,9 +787,13 @@ export default function App() {
       return calcBirthChart(new Date(bd.date), bd.hour, bd.min);
     } catch { return null; }
   });
+  const [pillReminder, setPillReminder] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("pill-reminder") || "null"); } catch { return null; }
+  });
 
   useEffect(() => { localStorage.setItem("period-entries", JSON.stringify(entries)); }, [entries]);
   useEffect(() => { if (userCycleLength) localStorage.setItem("cycle-length", userCycleLength); }, [userCycleLength]);
+  useEffect(() => { localStorage.setItem("pill-reminder", JSON.stringify(pillReminder)); }, [pillReminder]);
   useEffect(() => { localStorage.setItem("symptoms", JSON.stringify(symptoms)); }, [symptoms]);
   useEffect(() => { registerSW(); }, []);
 
@@ -791,12 +931,12 @@ export default function App() {
     const { phase, phaseKey, dayOfCycle } = phaseInfo;
     const phaseTrans = t.phases?.[phaseKey] || { nombre: phase.nombre, dias: phase.dias };
     const phaseIdx = ["menstruacion","folicular","ovulacion","lutea"].indexOf(phaseKey);
-    const tabs = [{ id: "hormonas", label: "🧪 Hormonas" }, { id: "fisico", label: "💪 Físico" }, { id: "emocional", label: "💜 Emocional" }, { id: "consejos", label: "✨ Consejos" }];
+    const tabs = t.horTabs.map((label, i) => ({ id: t.horTabIds[i], label }));
     return (
       <div style={S.hormoneCard}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
           <div style={{ fontSize: 28 }}>{phase.emoji}</div>
-          <div><div style={{ fontSize: 15, fontWeight: 700, color: phase.colorDark }}>{phaseTrans.nombre}</div><div style={{ fontSize: 11, color: "#9ca3af" }}>{phaseTrans.dias} · Día {dayOfCycle} de tu ciclo</div></div>
+          <div><div style={{ fontSize: 15, fontWeight: 700, color: phase.colorDark }}>{phaseTrans.nombre}</div><div style={{ fontSize: 11, color: "#9ca3af" }}>{phaseTrans.dias} · {t.horDayOf} {dayOfCycle} {t.horDayOfCycle}</div></div>
         </div>
         <div style={S.tabRow}>{tabs.map(tab => <button key={tab.id} onClick={() => setHormoneTab(tab.id)} style={{ ...S.tab, background: hormoneTab === tab.id ? phase.colorDark : "#f3f4f6", color: hormoneTab === tab.id ? "#fff" : "#6b7280" }}>{tab.label}</button>)}</div>
         <div style={{ marginTop: 14 }}>
@@ -804,10 +944,10 @@ export default function App() {
             const descArr = t.horDesc?.[h.nombre];
             const desc = descArr ? descArr[phaseIdx] : h.descripcion;
             return <HormoneBar key={h.nombre} nombre={h.nombre} nivel={h.nivel} descripcion={desc} color={phase.colorDark} />;
-          })}<p style={{ fontSize: 11, color: "#9ca3af", marginTop: 8, fontStyle: "italic" }}>Estimación basada en tu ciclo. No sustituye a un análisis médico.</p></div>}
-          {hormoneTab === "fisico" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>Síntomas físicos más probables ahora:</p>{phase.fisico.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
-          {hormoneTab === "emocional" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>Cómo puedes sentirte emocionalmente:</p>{phase.emocional.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
-          {hormoneTab === "consejos" && <div><p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, marginBottom: 6 }}>🥗 Alimentación</p>{phase.consejos.alimentacion.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}<p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, margin: "14px 0 6px" }}>🏃 Ejercicio</p>{phase.consejos.ejercicio.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
+          })}<p style={{ fontSize: 11, color: "#9ca3af", marginTop: 8, fontStyle: "italic" }}>{t.horDisclaimer}</p></div>}
+          {hormoneTab === "fisico" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>{t.horFisicoLabel}</p>{(phaseTrans.fisico || phase.fisico).map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
+          {hormoneTab === "emocional" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>{t.horEmocionalLabel}</p>{(phaseTrans.emocional || phase.emocional).map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
+          {hormoneTab === "consejos" && <div><p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, marginBottom: 6 }}>{t.horAlimLabel}</p>{(phaseTrans.alimentacion || phase.consejos.alimentacion).map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}<p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, margin: "14px 0 6px" }}>{t.horEjercLabel}</p>{(phaseTrans.ejercicio || phase.consejos.ejercicio).map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
         </div>
       </div>
     );
@@ -880,6 +1020,44 @@ export default function App() {
             <div style={S.symptomLabel}>{t.hinchazon}</div>
             <div style={S.chipRow}>
               {t.hinchazonOpts.map(v => <button key={v} onClick={() => toggle("hinchazon", v)} style={{ ...S.chip, background: data.hinchazon === v ? "#c4606f" : "#f9f0f1", color: data.hinchazon === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+            </div>
+          </div>
+
+          {/* Anticonceptivos */}
+          <div style={S.symptomGroup}>
+            <div style={S.symptomLabel}>{t.contraLabel}</div>
+            <div style={S.chipRow}>
+              {t.contraOpts.map(v => <button key={v} onClick={() => toggle("contra", v)} style={{ ...S.chip, background: data.contra === v ? "#8a6090" : "#f9f0f1", color: data.contra === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+            </div>
+            {data.contra === t.contraOpts[0] && (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                <button onClick={() => toggle("pastillaTomada", "si")} style={{ ...S.chip, background: data.pastillaTomada === "si" ? "#8a6090" : "#f9f0f1", color: data.pastillaTomada === "si" ? "#fff" : "#3d2c2c" }}>{t.contraTomada}</button>
+                {data.pastillaTomada === "si" && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 11, color: "#a89090" }}>{t.contraHora}</span>
+                    <select value={data.pastillaHora || "08:00"} onChange={e => setData(prev => ({ ...prev, pastillaHora: e.target.value }))}
+                      style={{ fontSize: 12, border: "1px solid #f2bec7", borderRadius: 8, padding: "4px 8px", color: "#3d2c2c", background: "#fdf8f6" }}>
+                      {Array.from({length:24},(_,i) => `${String(i).padStart(2,"0")}:00`).map(h => <option key={h}>{h}</option>)}
+                    </select>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Relaciones sexuales */}
+          <div style={S.symptomGroup}>
+            <div style={S.symptomLabel}>{t.sexLabel}</div>
+            <div style={S.chipRow}>
+              {t.sexOpts.map(v => <button key={v} onClick={() => toggle("sex", v)} style={{ ...S.chip, background: data.sex === v ? "#b07050" : "#f9f0f1", color: data.sex === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+            </div>
+          </div>
+
+          {/* Salud general */}
+          <div style={S.symptomGroup}>
+            <div style={S.symptomLabel}>{t.enfermedadLabel}</div>
+            <div style={S.chipRow}>
+              {t.enfermedadOpts.map(v => <button key={v} onClick={() => toggle("enfermedad", v)} style={{ ...S.chip, background: data.enfermedad === v ? "#7a9e7e" : "#f9f0f1", color: data.enfermedad === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Botones */}
@@ -1420,6 +1598,42 @@ export default function App() {
             style={{ ...S.chip, background: "#fff0f3", color: "#c4606f", padding: "10px 18px" }}>
             {t.cycleChangeBtn}
           </button>
+        </div>
+
+        {/* Recordatorio pastilla */}
+        <div style={S.statCard}>
+          <div style={S.statTitle}>{t.pillReminderTitle}</div>
+          <p style={{ fontSize: 12, color: "#a89090", margin: "8px 0 14px" }}>{t.pillReminderDesc}</p>
+          {pillReminder ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ background: "#f0faf0", borderRadius: 12, padding: "10px 14px" }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#7a9e7e" }}>{t.pillReminderOn}</span>
+              </div>
+              <span style={{ fontSize: 13, color: "#8a6090", fontWeight: 600 }}>⏰ {pillReminder.time}</span>
+              <button onClick={() => setPillReminder(null)} style={{ ...S.chip, background: "#fce8ea", color: "#c4606f", fontSize: 12 }}>✕</button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 12, color: "#a89090" }}>{t.pillReminderTime}</span>
+              <select id="pill-time" defaultValue="08:00"
+                style={{ fontSize: 14, border: "1px solid #f2bec7", borderRadius: 10, padding: "8px 12px", color: "#3d2c2c", background: "#fdf8f6" }}>
+                {Array.from({length:24},(_,i) => `${String(i).padStart(2,"0")}:00`).map(h => <option key={h}>{h}</option>)}
+              </select>
+              <button onClick={() => {
+                const time = document.getElementById("pill-time").value;
+                setPillReminder({ time });
+                if (notifPermission === "granted") {
+                  const [h, m] = time.split(":").map(Number);
+                  const now = new Date(); const fire = new Date(); fire.setHours(h, m, 0, 0);
+                  if (fire <= now) fire.setDate(fire.getDate() + 1);
+                  scheduleLocalNotification("💊 Vitalia", `${t.pillReminderTitle} — ${time}`, fire - now);
+                }
+                showToast(`⏰ ${t.pillReminderOn}`);
+              }} style={{ ...S.onboardingBtn, padding: "10px 16px", fontSize: 13, marginTop: 0 }}>
+                {notifPermission !== "granted" ? t.notifBtn : t.pillReminderBtn}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Borrar datos */}
