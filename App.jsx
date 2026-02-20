@@ -76,10 +76,11 @@ const TRANSLATIONS = {
     horAlimLabel: "🥗 Alimentación", horEjercLabel: "🏃 Ejercicio",
     horDisclaimer: "Estimación basada en tu ciclo. No sustituye a un análisis médico.",
     horDayOf: "Día", horDayOfCycle: "de tu ciclo",
-    contraLabel: "💊 Anticonceptivos", contraOpts: ["Pastilla","Anillo","DIU","Parche","Implante","Condón","Otro"],
+    contraLabel: "💊 Anticonceptivos", contraOpts: ["Pastilla","Anillo","DIU","Parche","Implante","Otro"],
     contraTomada: "💊 Pastilla tomada hoy", contraHora: "Hora:",
     sexLabel: "🫀 Relaciones sexuales", sexOpts: ["No","Sí con protección","Sí sin protección"],
     enfermedadLabel: "🤒 Salud general", enfermedadOpts: ["Ninguna","Resfriado","Fiebre","Dolor fuerte de cabeza","Náuseas","Infección","Otro"],
+    itsLabel: "🦠 Enfermedades", itsOpts: ["Ninguna","Candidiasis","Clamidia","Gonorrea","Herpes","VPH","Vaginosis bacteriana","Otro"],
     pillReminderTitle: "💊 Recordatorio pastilla", pillReminderDesc: "Recibirás una notificación diaria a la hora que elijas.",
     pillReminderTime: "Hora del recordatorio:", pillReminderOn: "Recordatorio activado ✓", pillReminderBtn: "Activar recordatorio",
     phases: {
@@ -172,10 +173,11 @@ const TRANSLATIONS = {
     horAlimLabel: "🥗 Nutrition", horEjercLabel: "🏃 Exercise",
     horDisclaimer: "Estimate based on your cycle. Not a substitute for medical advice.",
     horDayOf: "Day", horDayOfCycle: "of your cycle",
-    contraLabel: "💊 Contraceptives", contraOpts: ["Pill","Ring","IUD","Patch","Implant","Condom","Other"],
+    contraLabel: "💊 Contraceptives", contraOpts: ["Pill","Ring","IUD","Patch","Implant","Other"],
     contraTomada: "💊 Pill taken today", contraHora: "Time:",
     sexLabel: "🫀 Sexual activity", sexOpts: ["No","Yes with protection","Yes without protection"],
     enfermedadLabel: "🤒 General health", enfermedadOpts: ["None","Cold","Fever","Severe headache","Nausea","Infection","Other"],
+    itsLabel: "🦠 Infections & STIs", itsOpts: ["None","Candidiasis","Chlamydia","Gonorrhea","Herpes","HPV","Bacterial vaginosis","Other"],
     pillReminderTitle: "💊 Pill reminder", pillReminderDesc: "You'll receive a daily notification at the time you choose.",
     pillReminderTime: "Reminder time:", pillReminderOn: "Reminder enabled ✓", pillReminderBtn: "Enable reminder",
     horDayOf: "Day", horDayOfCycle: "of your cycle",
@@ -269,10 +271,11 @@ const TRANSLATIONS = {
     horAlimLabel: "🥗 Alimentação", horEjercLabel: "🏃 Exercício",
     horDisclaimer: "Estimativa baseada no seu ciclo. Não substitui aconselhamento médico.",
     horDayOf: "Dia", horDayOfCycle: "do seu ciclo",
-    contraLabel: "💊 Anticoncepcionais", contraOpts: ["Pílula","Anel","DIU","Adesivo","Implante","Preservativo","Outro"],
+    contraLabel: "💊 Anticoncepcionais", contraOpts: ["Pílula","Anel","DIU","Adesivo","Implante","Outro"],
     contraTomada: "💊 Pílula tomada hoje", contraHora: "Hora:",
     sexLabel: "🫀 Relações sexuais", sexOpts: ["Não","Sim com proteção","Sim sem proteção"],
     enfermedadLabel: "🤒 Saúde geral", enfermedadOpts: ["Nenhuma","Constipação","Febre","Dor de cabeça forte","Náuseas","Infeção","Outro"],
+    itsLabel: "🦠 Doenças & ISTs", itsOpts: ["Nenhuma","Candidíase","Clamídia","Gonorreia","Herpes","HPV","Vaginose bacteriana","Outro"],
     pillReminderTitle: "💊 Lembrete da pílula", pillReminderDesc: "Receberá uma notificação diária à hora que escolher.",
     pillReminderTime: "Hora do lembrete:", pillReminderOn: "Lembrete ativado ✓", pillReminderBtn: "Ativar lembrete",
     phases: {
@@ -365,10 +368,11 @@ const TRANSLATIONS = {
     horAlimLabel: "🥗 Alimentazione", horEjercLabel: "🏃 Esercizio",
     horDisclaimer: "Stima basata sul tuo ciclo. Non sostituisce un consulto medico.",
     horDayOf: "Giorno", horDayOfCycle: "del tuo ciclo",
-    contraLabel: "💊 Contraccettivi", contraOpts: ["Pillola","Anello","IUD","Cerotto","Impianto","Preservativo","Altro"],
+    contraLabel: "💊 Contraccettivi", contraOpts: ["Pillola","Anello","IUD","Cerotto","Impianto","Altro"],
     contraTomada: "💊 Pillola presa oggi", contraHora: "Ora:",
     sexLabel: "🫀 Rapporti sessuali", sexOpts: ["No","Sì con protezione","Sì senza protezione"],
     enfermedadLabel: "🤒 Salute generale", enfermedadOpts: ["Nessuna","Raffreddore","Febbre","Forte mal di testa","Nausea","Infezione","Altro"],
+    itsLabel: "🦠 Malattie & ITS", itsOpts: ["Nessuna","Candidosi","Clamidia","Gonorrea","Herpes","HPV","Vaginosi batterica","Altro"],
     pillReminderTitle: "💊 Promemoria pillola", pillReminderDesc: "Riceverai una notifica giornaliera all'ora che scegli.",
     pillReminderTime: "Ora del promemoria:", pillReminderOn: "Promemoria attivato ✓", pillReminderBtn: "Attiva promemoria",
     phases: {
@@ -1058,6 +1062,14 @@ export default function App() {
             <div style={S.symptomLabel}>{t.enfermedadLabel}</div>
             <div style={S.chipRow}>
               {t.enfermedadOpts.map(v => <button key={v} onClick={() => toggle("enfermedad", v)} style={{ ...S.chip, background: data.enfermedad === v ? "#7a9e7e" : "#f9f0f1", color: data.enfermedad === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+            </div>
+          </div>
+
+          {/* Enfermedades / ITS */}
+          <div style={S.symptomGroup}>
+            <div style={S.symptomLabel}>{t.itsLabel}</div>
+            <div style={S.chipRow}>
+              {t.itsOpts.map(v => <button key={v} onClick={() => toggle("its", v)} style={{ ...S.chip, background: data.its === v ? "#8a7e9e" : "#f9f0f1", color: data.its === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Botones */}
