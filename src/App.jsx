@@ -573,7 +573,7 @@ export default function App() {
         <p style={S.onboardingHint}>{t.cycleHint}</p>
         <div style={S.onboardingCard}>
           <label style={S.onboardingLabel}>{t.cycleQuestion}</label>
-          <input type="number" value={cycleInput} onChange={e => { setCycleInput(e.target.value); setCycleError(""); }} onKeyDown={e => e.key === "Enter" && handleCycleSubmit()} placeholder={t.cyclePlaceholder} style={S.onboardingInput} min={21} max={45} />
+          <input type="tel" inputMode="numeric" pattern="[0-9]*" value={cycleInput} onChange={e => { setCycleInput(e.target.value.replace(/[^0-9]/g, '')); setCycleError(""); }} onKeyDown={e => e.key === "Enter" && handleCycleSubmit()} placeholder={t.cyclePlaceholder} style={S.onboardingInput} />
           {cycleError && <p style={{ color: "#ef4444", fontSize: 12 }}>{t.cycleError}</p>}
           <button onClick={handleCycleSubmit} style={S.onboardingBtn}>{t.continueBtn}</button>
           <button onClick={() => { setUserCycleLength(28); setEditingCycle(false); }} style={S.onboardingSkip}>{t.dontKnow}</button>
