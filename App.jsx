@@ -813,31 +813,27 @@ export default function App() {
     return symptoms[key] && Object.keys(symptoms[key]).length > 0;
   }
   function getDayEmoji(date) {
-    const data = getSymptomsForDay(date);
-    // Humor — match by emoji prefix regardless of language
-    if (data.humor) {
-      const e = data.humor.split(" ")[0];
-      if (["😊","😤","😢","😰","😐"].includes(e)) return e;
-    }
-    // Energia — match by emoji prefix
-    if (data.energia) {
-      const e = data.energia.split(" ")[0];
-      if (["🔋","🔶","🪫"].includes(e)) return e;
-    }
-    // Dolor/Pain — check it's not "none" (always first option in all langs)
-    if (data.dolor && data.dolor !== t.dolorOpts[0]) return "🩹";
-    // Anticonceptivos
-    if (data.contra) return "💊";
-    // Relaciones sexuales — not "no" (always first option)
-    if (data.sex && data.sex !== t.sexOpts[0]) return "🫀";
-    // ITS
-    if (data.its && data.its !== t.itsOpts[0]) return "🦠";
-    // Enfermedad
-    if (data.enfermedad && data.enfermedad !== t.enfermedadOpts[0]) return "🤒";
-    // Hinchazon — "sí" is always second option
-    if (data.hinchazon === t.hinchazonOpts[1]) return "🫧";
-    // Flujo
-    if (data.flujo && data.flujo !== t.flujoOpts[0]) return "💧";
+    const d = getSymptomsForDay(date);
+    // Humor — índices: 0=😊 1=😤 2=😢 3=😰 4=😐
+    const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
+    if (d.humor !== null && d.humor !== undefined) return HUMOR_EMOJIS[d.humor] || "😊";
+    // Energia — índices: 0=🔋 1=🔶 2=🪫
+    const ENERGIA_EMOJIS = ["🔋","🔶","🪫"];
+    if (d.energia !== null && d.energia !== undefined) return ENERGIA_EMOJIS[d.energia] || "🔋";
+    // Anticonceptivos (cualquier índice)
+    if (d.contra !== null && d.contra !== undefined) return "💊";
+    // Relaciones sexuales (índice > 0 = sí)
+    if (d.sex !== null && d.sex !== undefined && d.sex > 0) return "🫀";
+    // ITS (índice > 0 = enfermedad)
+    if (d.its !== null && d.its !== undefined && d.its > 0) return "🦠";
+    // Salud general (índice > 0)
+    if (d.enfermedad !== null && d.enfermedad !== undefined && d.enfermedad > 0) return "🤒";
+    // Dolor (índice > 0 = hay dolor)
+    if (d.dolor !== null && d.dolor !== undefined && d.dolor > 0) return "🩹";
+    // Hinchazón (índice 1 = sí)
+    if (d.hinchazon === 1) return "🫧";
+    // Flujo (índice > 0)
+    if (d.flujo !== null && d.flujo !== undefined && d.flujo > 0) return "💧";
     return null;
   }
 
@@ -984,17 +980,16 @@ export default function App() {
     const dateKey = date.toISOString().slice(0, 10);
     const [data, setData] = useState(() => symptoms[dateKey] || {});
 
-    const DOLOR = ["Ninguno", "Cólicos", "Cabeza", "Espalda", "Varios"];
-    const HUMOR = ["😊 Feliz", "😤 Irritable", "😢 Triste", "😰 Ansiosa", "😐 Neutro"];
-    const ENERGIA = ["🔋 Alta", "🔶 Media", "🪫 Baja"];
-    const FLUJO = ["Ninguno", "Escaso", "Normal", "Abundante"];
-
-    function toggle(field, value) {
-      setData(prev => ({ ...prev, [field]: prev[field] === value ? null : value }));
+    // Guarda índice numérico para campos multi-opción (language-independent)
+    // Para humor y energía guarda el emoji prefix (siempre igual en todos los idiomas)
+    function toggle(field, idx) {
+      setData(prev => ({ ...prev, [field]: prev[field] === idx ? null : idx }));
     }
 
+    function isSelected(field, idx) { return data[field] === idx; }
+
     function save() {
-      const clean = Object.fromEntries(Object.entries(data).filter(([, v]) => v));
+      const clean = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== null && v !== undefined && v !== ""));
       saveSymptomsForDay(dateKey, clean);
       onClose();
       showToast(t.symptomsSaved);
@@ -1017,35 +1012,35 @@ export default function App() {
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.dolor}</div>
             <div style={S.chipRow}>
-              {t.dolorOpts.map(v => <button key={v} onClick={() => toggle("dolor", v)} style={{ ...S.chip, background: data.dolor === v ? "#c4606f" : "#f9f0f1", color: data.dolor === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.dolorOpts.map((v,i) => <button key={i} onClick={() => toggle("dolor", i)} style={{ ...S.chip, background: isSelected("dolor",i) ? "#c4606f" : "#f9f0f1", color: isSelected("dolor",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Humor */}
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.humor}</div>
             <div style={S.chipRow}>
-              {t.humorOpts.map(v => <button key={v} onClick={() => toggle("humor", v)} style={{ ...S.chip, background: data.humor === v ? "#c4606f" : "#f9f0f1", color: data.humor === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.humorOpts.map((v,i) => <button key={i} onClick={() => toggle("humor", i)} style={{ ...S.chip, background: isSelected("humor",i) ? "#c4606f" : "#f9f0f1", color: isSelected("humor",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Energía */}
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.energia}</div>
             <div style={S.chipRow}>
-              {t.energiaOpts.map(v => <button key={v} onClick={() => toggle("energia", v)} style={{ ...S.chip, background: data.energia === v ? "#c4606f" : "#f9f0f1", color: data.energia === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.energiaOpts.map((v,i) => <button key={i} onClick={() => toggle("energia", i)} style={{ ...S.chip, background: isSelected("energia",i) ? "#c4606f" : "#f9f0f1", color: isSelected("energia",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Flujo */}
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.flujo}</div>
             <div style={S.chipRow}>
-              {t.flujoOpts.map(v => <button key={v} onClick={() => toggle("flujo", v)} style={{ ...S.chip, background: data.flujo === v ? "#c4606f" : "#f9f0f1", color: data.flujo === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.flujoOpts.map((v,i) => <button key={i} onClick={() => toggle("flujo", i)} style={{ ...S.chip, background: isSelected("flujo",i) ? "#c4606f" : "#f9f0f1", color: isSelected("flujo",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Hinchazón */}
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.hinchazon}</div>
             <div style={S.chipRow}>
-              {t.hinchazonOpts.map(v => <button key={v} onClick={() => toggle("hinchazon", v)} style={{ ...S.chip, background: data.hinchazon === v ? "#c4606f" : "#f9f0f1", color: data.hinchazon === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.hinchazonOpts.map((v,i) => <button key={i} onClick={() => toggle("hinchazon", i)} style={{ ...S.chip, background: isSelected("hinchazon",i) ? "#c4606f" : "#f9f0f1", color: isSelected("hinchazon",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
 
@@ -1053,12 +1048,12 @@ export default function App() {
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.contraLabel}</div>
             <div style={S.chipRow}>
-              {t.contraOpts.map(v => <button key={v} onClick={() => toggle("contra", v)} style={{ ...S.chip, background: data.contra === v ? "#8a6090" : "#f9f0f1", color: data.contra === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.contraOpts.map((v,i) => <button key={i} onClick={() => toggle("contra", i)} style={{ ...S.chip, background: isSelected("contra",i) ? "#8a6090" : "#f9f0f1", color: isSelected("contra",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
-            {data.contra === t.contraOpts[0] && (
+            {data.contra === 0 && (
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
-                <button onClick={() => toggle("pastillaTomada", "si")} style={{ ...S.chip, background: data.pastillaTomada === "si" ? "#8a6090" : "#f9f0f1", color: data.pastillaTomada === "si" ? "#fff" : "#3d2c2c" }}>{t.contraTomada}</button>
-                {data.pastillaTomada === "si" && (
+                <button onClick={() => toggle("pastillaTomada", 1)} style={{ ...S.chip, background: data.pastillaTomada === 1 ? "#8a6090" : "#f9f0f1", color: data.pastillaTomada === 1 ? "#fff" : "#3d2c2c" }}>{t.contraTomada}</button>
+                {data.pastillaTomada === 1 && (
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <span style={{ fontSize: 11, color: "#a89090" }}>{t.contraHora}</span>
                     <select value={data.pastillaHora || "08:00"} onChange={e => setData(prev => ({ ...prev, pastillaHora: e.target.value }))}
@@ -1075,7 +1070,7 @@ export default function App() {
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.sexLabel}</div>
             <div style={S.chipRow}>
-              {t.sexOpts.map(v => <button key={v} onClick={() => toggle("sex", v)} style={{ ...S.chip, background: data.sex === v ? "#b07050" : "#f9f0f1", color: data.sex === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.sexOpts.map((v,i) => <button key={i} onClick={() => toggle("sex", i)} style={{ ...S.chip, background: isSelected("sex",i) ? "#b07050" : "#f9f0f1", color: isSelected("sex",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
 
@@ -1083,7 +1078,7 @@ export default function App() {
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.enfermedadLabel}</div>
             <div style={S.chipRow}>
-              {t.enfermedadOpts.map(v => <button key={v} onClick={() => toggle("enfermedad", v)} style={{ ...S.chip, background: data.enfermedad === v ? "#7a9e7e" : "#f9f0f1", color: data.enfermedad === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.enfermedadOpts.map((v,i) => <button key={i} onClick={() => toggle("enfermedad", i)} style={{ ...S.chip, background: isSelected("enfermedad",i) ? "#7a9e7e" : "#f9f0f1", color: isSelected("enfermedad",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
 
@@ -1091,7 +1086,7 @@ export default function App() {
           <div style={S.symptomGroup}>
             <div style={S.symptomLabel}>{t.itsLabel}</div>
             <div style={S.chipRow}>
-              {t.itsOpts.map(v => <button key={v} onClick={() => toggle("its", v)} style={{ ...S.chip, background: data.its === v ? "#8a7e9e" : "#f9f0f1", color: data.its === v ? "#fff" : "#3d2c2c" }}>{v}</button>)}
+              {t.itsOpts.map((v,i) => <button key={i} onClick={() => toggle("its", i)} style={{ ...S.chip, background: isSelected("its",i) ? "#8a7e9e" : "#f9f0f1", color: isSelected("its",i) ? "#fff" : "#3d2c2c" }}>{v}</button>)}
             </div>
           </div>
           {/* Botones */}
@@ -1461,21 +1456,38 @@ export default function App() {
 
     const total = allEntries.length;
 
-    function countByValue(field) {
+    function countByIndex(field, opts) {
       const counts = {};
-      allEntries.forEach(({ data }) => { if (data[field]) counts[data[field]] = (counts[data[field]] || 0) + 1; });
+      allEntries.forEach(({ data }) => {
+        const idx = data[field];
+        if (idx !== null && idx !== undefined) {
+          const label = opts[idx] || idx;
+          counts[label] = (counts[label] || 0) + 1;
+        }
+      });
       return Object.entries(counts).sort((a, b) => b[1] - a[1]);
     }
 
-    const humorStats = countByValue("humor");
-    const dolorStats = countByValue("dolor").filter(([v]) => v !== t.dolorOpts[0]);
-    const energiaStats = countByValue("energia");
-    const flujoStats = countByValue("flujo").filter(([v]) => v !== t.flujoOpts[0]);
-    const hinchazonSi = allEntries.filter(e => e.data.hinchazon === t.hinchazonOpts[1]).length;
-    const contraStats = countByValue("contra");
-    const sexStats = countByValue("sex").filter(([v]) => v !== t.sexOpts[0]);
-    const itsStats = countByValue("its").filter(([v]) => v !== t.itsOpts[0]);
-    const enfermedadStats = countByValue("enfermedad").filter(([v]) => v !== t.enfermedadOpts[0]);
+    const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
+    const humorStats = (() => {
+      const counts = {};
+      allEntries.forEach(({ data }) => {
+        if (data.humor !== null && data.humor !== undefined) {
+          const label = HUMOR_EMOJIS[data.humor] ? `${HUMOR_EMOJIS[data.humor]} ${t.humorOpts[data.humor]?.split(" ").slice(1).join(" ") || ""}`.trim() : t.humorOpts[data.humor];
+          if (label) counts[label] = (counts[label] || 0) + 1;
+        }
+      });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    })();
+
+    const dolorStats = countByIndex("dolor", t.dolorOpts).filter(([v]) => v !== t.dolorOpts[0]);
+    const energiaStats = countByIndex("energia", t.energiaOpts);
+    const flujoStats = countByIndex("flujo", t.flujoOpts).filter(([v]) => v !== t.flujoOpts[0]);
+    const hinchazonSi = allEntries.filter(e => e.data.hinchazon === 1).length;
+    const contraStats = countByIndex("contra", t.contraOpts);
+    const sexStats = countByIndex("sex", t.sexOpts).filter(([v]) => v !== t.sexOpts[0]);
+    const itsStats = countByIndex("its", t.itsOpts).filter(([v]) => v !== t.itsOpts[0]);
+    const enfermedadStats = countByIndex("enfermedad", t.enfermedadOpts).filter(([v]) => v !== t.enfermedadOpts[0]);
 
     const firstDate = allEntries.length > 0 ? allEntries[0].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
     const lastDate = allEntries.length > 0 ? allEntries[allEntries.length-1].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
