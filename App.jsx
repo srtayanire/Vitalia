@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d; }
 function startOfDay(date) { return new Date(date.getFullYear(), date.getMonth(), date.getDate()); }
@@ -19,7 +19,7 @@ const TRANSLATIONS = {
     ovulationDay: "Día de ovulación", fertilDay: "fértil",
     realCycle: "Ciclo real", configCycle: "Ciclo", change: "Cambiar",
     startPeriod: "🩸 Inicio del período", endPeriod: "✓ Fin del período",
-    home: "Inicio", calendar: "Calendario", stats: "Stats", horoscope: "Horóscopo", settings: "Ajustes",
+    home: "Inicio", calendar: "Calendario", stats: "Estadísticas", horoscope: "Horóscopo", settings: "Ajustes",
     calTitle: "📅 Calendario", calInstruction: "Toca un día para ver síntomas o marcar período",
     calPending: "Inicio", calPendingEnd: "toca el día final",
     periodSaved: "Período guardado ✓", periodDeleted: "Período eliminado ✕", newStart: "Nuevo inicio:",
@@ -116,7 +116,7 @@ const TRANSLATIONS = {
     ovulationDay: "Ovulation day", fertilDay: "fertile",
     realCycle: "Real cycle", configCycle: "Cycle", change: "Change",
     startPeriod: "🩸 Start period", endPeriod: "✓ End period",
-    home: "Home", calendar: "Calendar", stats: "Stats", horoscope: "Horoscope", settings: "Settings",
+    home: "Home", calendar: "Calendar", stats: "Statistics", horoscope: "Horoscope", settings: "Settings",
     calTitle: "📅 Calendar", calInstruction: "Tap a day to log symptoms or mark period",
     calPending: "Start", calPendingEnd: "tap the end day",
     periodSaved: "Period saved ✓", periodDeleted: "Period deleted ✕", newStart: "New start:",
@@ -214,7 +214,7 @@ const TRANSLATIONS = {
     ovulationDay: "Dia de ovulação", fertilDay: "fértil",
     realCycle: "Ciclo real", configCycle: "Ciclo", change: "Alterar",
     startPeriod: "🩸 Início da menstruação", endPeriod: "✓ Fim da menstruação",
-    home: "Início", calendar: "Calendário", stats: "Stats", horoscope: "Horóscopo", settings: "Ajustes",
+    home: "Início", calendar: "Calendário", stats: "Estatísticas", horoscope: "Horóscopo", settings: "Ajustes",
     calTitle: "📅 Calendário", calInstruction: "Toque num dia para ver sintomas ou marcar menstruação",
     calPending: "Início", calPendingEnd: "toque no dia final",
     periodSaved: "Menstruação guardada ✓", periodDeleted: "Menstruação eliminada ✕", newStart: "Novo início:",
@@ -311,7 +311,7 @@ const TRANSLATIONS = {
     ovulationDay: "Giorno di ovulazione", fertilDay: "fertile",
     realCycle: "Ciclo reale", configCycle: "Ciclo", change: "Cambia",
     startPeriod: "🩸 Inizio ciclo", endPeriod: "✓ Fine ciclo",
-    home: "Inizio", calendar: "Calendario", stats: "Stats", horoscope: "Oroscopo", settings: "Impostazioni",
+    home: "Inizio", calendar: "Calendario", stats: "Statistiche", horoscope: "Oroscopo", settings: "Impostazioni",
     calTitle: "📅 Calendario", calInstruction: "Tocca un giorno per vedere sintomi o segnare il ciclo",
     calPending: "Inizio", calPendingEnd: "tocca il giorno finale",
     periodSaved: "Ciclo salvato ✓", periodDeleted: "Ciclo eliminato ✕", newStart: "Nuovo inizio:",
@@ -737,13 +737,28 @@ const SIGN_PERSONALITY = [
   "Eres curiosa, adaptable y brillante. Tu mente está siempre activa y te encanta aprender.",
   "Eres intuitiva, protectora y profundamente emocional. Tu hogar y familia son tu centro.",
   "Eres generosa, carismática y creativa. Tienes un brillo natural que atrae a los demás.",
-  "Eres analítica, detallista y práctica. Buscas la perfección y te entrega a lo que haces.",
+  "Eres analítica, detallista y práctica. Buscas la perfección y te entregas a lo que haces.",
   "Eres diplomática, encantadora y justa. Buscas el equilibrio y la armonía en todo.",
   "Eres intensa, magnética y transformadora. Vas siempre a las profundidades de todo.",
   "Eres aventurera, optimista y filosófica. Tu espíritu libre busca siempre nuevos horizontes.",
   "Eres ambiciosa, disciplinada y responsable. Tu perseverancia te lleva lejos.",
   "Eres original, humanista e independiente. Piensas de forma única y valoras la libertad.",
   "Eres empática, creativa e intuitiva. Absorbes las emociones del entorno y eres muy sensible.",
+];
+
+const LUNA_PERSONALITY = [
+  "Emocionalmente necesitas acción y novedad. Tu estado de ánimo cambia rápido y te frustra la calma excesiva.",
+  "Buscas seguridad emocional y rutinas estables. Te reconfortan los placeres sencillos y la constancia.",
+  "Tus emociones se expresan a través de la comunicación. Necesitas hablar, escribir y conectar para sentirte bien.",
+  "Eres muy sensible e intuitiva. Absorbes las emociones de quienes te rodean y necesitas un espacio seguro para recargar.",
+  "Necesitas sentirte admirada y apreciada. Tu generosidad emocional es enorme, pero también necesitas reciprocidad.",
+  "Procesas las emociones analizándolas. Puedes ser autocrítica en exceso, pero eso también te da claridad interior.",
+  "Buscas equilibrio emocional y evitas los conflictos. Las relaciones armoniosas son esenciales para tu bienestar.",
+  "Tus emociones son profundas e intensas. Sientes todo con gran fuerza y te cuesta soltar lo que te ha herido.",
+  "Necesitas libertad emocional y aventura. Te aburre la rutina y te nutres de experiencias nuevas.",
+  "Controlas tus emociones con disciplina. Puede costarte abrirte, pero cuando lo haces tu lealtad es total.",
+  "Emocionalmente valoras tu independencia. Necesitas espacio para procesar tus sentimientos a tu manera.",
+  "Eres profundamente empática y compasiva. Las emociones ajenas te afectan tanto como las propias.",
 ];
 
 const ASC_MEANINGS = [
@@ -761,6 +776,137 @@ const ASC_MEANINGS = [
   "Proyectas sensibilidad, misticismo y dulzura. Los demás te ven como alguien soñadora y compasiva.",
 ];
 
+// ─── Ruleta de ciclo ──────────────────────────────────────────────────────────
+function CycleWheel({ entries, cycleLength, nextPeriodStart, ovulationDays, today, t, lang, activePeriod, statusNumber, statusText, statusSub }) {
+  const [rotation, setRotation] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [lastAngle, setLastAngle] = useState(null);
+  const [velocity, setVelocity] = useState(0);
+  const ref = useRef(null);
+  const animRef = useRef(null);
+
+  const SIZE = 260, CX = 130, CY = 130, R = 112, INNER = 70;
+
+  function polarToXY(angle, r) {
+    const rad = (angle - 90) * Math.PI / 180;
+    return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+  }
+  function arcPath(sA, eA, r, ir) {
+    const s = polarToXY(sA, r), e = polarToXY(eA, r), si = polarToXY(sA, ir), ei = polarToXY(eA, ir);
+    const lg = eA - sA > 180 ? 1 : 0;
+    return `M${s.x} ${s.y} A${r} ${r} 0 ${lg} 1 ${e.x} ${e.y} L${ei.x} ${ei.y} A${ir} ${ir} 0 ${lg} 0 ${si.x} ${si.y}Z`;
+  }
+
+  const segments = Array.from({ length: cycleLength }, (_, i) => {
+    const day = i + 1;
+    const sA = (i / cycleLength) * 360, eA = ((i + 1) / cycleLength) * 360;
+    const color = day <= 5 ? "#f2bec7" : day >= 14 && day <= 15 ? "#d4788a" : day >= 11 && day <= 17 ? "#f9d8e0" : day > 17 ? "#f5e6d8" : "#fceef0";
+    return { day, sA, eA, color };
+  });
+
+  function getAngle(e) {
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const px = e.touches ? e.touches[0].clientX : e.clientX;
+    const py = e.touches ? e.touches[0].clientY : e.clientY;
+    return Math.atan2(py - cy, px - cx) * 180 / Math.PI;
+  }
+
+  function onStart(e) {
+    e.preventDefault();
+    if (animRef.current) cancelAnimationFrame(animRef.current);
+    setDragging(true);
+    setLastAngle(getAngle(e));
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const angle = getAngle(e);
+    const delta = ((angle - lastAngle + 540) % 360) - 180;
+    setRotation(r => r + delta);
+    setVelocity(delta);
+    setLastAngle(angle);
+  }
+  function onEnd() {
+    setDragging(false);
+    let vel = velocity;
+    function decel() {
+      vel *= 0.92;
+      setRotation(r => r + vel);
+      if (Math.abs(vel) > 0.4) animRef.current = requestAnimationFrame(decel);
+    }
+    animRef.current = requestAnimationFrame(decel);
+  }
+
+  // Día que apunta la flecha (top)
+  const norm = (((-rotation % 360) + 360) % 360);
+  const pointedDay = Math.floor((norm / 360) * cycleLength) + 1;
+  const clampedDay = Math.min(Math.max(pointedDay, 1), cycleLength);
+
+  const isMens = clampedDay <= 5;
+  const isOv = clampedDay === 14 || clampedDay === 15;
+  const isFert = clampedDay >= 11 && clampedDay <= 17 && !isOv;
+
+
+  let pointedDate = null;
+  if (entries.length > 0) {
+    const lastStart = new Date([...entries].sort((a,b) => new Date(a.start)-new Date(b.start)).at(-1).start);
+    pointedDate = new Date(lastStart);
+    pointedDate.setDate(pointedDate.getDate() + clampedDay - 1);
+  }
+
+  const wheelLabel = isOv ? (t.ovulationDay || "Ovulación") : isFert ? (t.fertilDay || "Fértil") : isMens ? (t.periodActive || "Menstruación") : (t.phases?.lutea?.nombre || "Fase Lútea");
+  const wheelColor = isOv ? "#b85068" : isFert ? "#d4788a" : isMens ? "#c4606f" : "#b07050";
+
+  // Etiqueta corta para el centro (máx 2 palabras)
+  const shortLabel = activePeriod
+    ? (lang==="en"?"Period":lang==="pt"?"Regra":lang==="it"?"Ciclo":"Regla")
+    : statusNumber !== null
+      ? (lang==="en"?"Days":lang==="pt"?"Dias":lang==="it"?"Giorni":"Días")
+      : "";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+      <div style={{ position: "relative", width: SIZE, height: SIZE, cursor: dragging ? "grabbing" : "grab", touchAction: "none" }}
+        ref={ref}
+        onMouseDown={onStart} onMouseMove={onMove} onMouseUp={onEnd} onMouseLeave={onEnd}
+        onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}>
+        <svg width={SIZE} height={SIZE} style={{ transform: `rotate(${rotation}deg)` }}>
+          {segments.map(s => (
+            <path key={s.day} d={arcPath(s.sA, s.eA, R, INNER)} fill={s.color} stroke="#fff" strokeWidth="1.5" />
+          ))}
+          {segments.filter(s => s.day % 7 === 0 || s.day === 1 || s.day === 14).map(s => {
+            const mid = polarToXY((s.sA + s.eA) / 2, (R + INNER) / 2);
+            return <text key={`n${s.day}`} x={mid.x} y={mid.y} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#8a6070" fontWeight="700">{s.day}</text>;
+          })}
+          {[1,2,3].map(d => { const s = segments[d-1]; const p = polarToXY((s.sA+s.eA)/2,(R+INNER)/2-1); return <text key={`e${d}`} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="10">🩸</text>; })}
+          {[14,15].map(d => { const s = segments[d-1]; const p = polarToXY((s.sA+s.eA)/2,(R+INNER)/2-1); return <text key={`e${d}`} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="10">🌸</text>; })}
+          <circle cx={CX} cy={CY} r={INNER} fill="white" opacity="0.95"/>
+        </svg>
+        {/* Centro fijo */}
+        <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", textAlign:"center", pointerEvents:"none", width: INNER * 2 - 8 }}>
+          <div style={{ fontSize: 32, fontWeight: 800, color: activePeriod ? "#c4606f" : wheelColor, lineHeight: 1 }}>
+            {statusNumber !== null ? statusNumber : clampedDay}
+          </div>
+          <div style={{ fontSize: 10, color: "#a89090", fontWeight: 600, marginTop: 3, lineHeight: 1.2 }}>
+            {shortLabel}
+          </div>
+          {statusSub && <div style={{ fontSize: 9, color: "#c4606f", marginTop: 2 }}>{statusSub}</div>}
+        </div>
+        {/* Flecha */}
+        <div style={{ position:"absolute", top: 2, left:"50%", transform:"translateX(-50%)", fontSize: 16, color:"#c4606f", pointerEvents:"none", lineHeight: 1 }}>▼</div>
+      </div>
+      {/* Info debajo */}
+      <div style={{ fontSize: 11, color: wheelColor, fontWeight: 600, textAlign: "center" }}>
+        {wheelLabel}
+        {pointedDate && !activePeriod && <span style={{ color:"#a89090", fontWeight:400, marginLeft:6 }}>· {pointedDate.toLocaleDateString(undefined,{day:"numeric",month:"short"})}</span>}
+      </div>
+      <div style={{ fontSize: 10, color: "#c8b8b8", textAlign: "center" }}>
+        {lang==="en"?"Drag to explore your cycle":lang==="pt"?"Arraste para explorar":lang==="it"?"Trascina per esplorare":"Arrastra para explorar el ciclo"}
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [screen, setScreen] = useState("home");
@@ -808,33 +954,21 @@ export default function App() {
     const key = date.toISOString().slice(0, 10);
     return symptoms[key] || {};
   }
-  function hasSymptoms(date) {
-    const key = date.toISOString().slice(0, 10);
-    return symptoms[key] && Object.keys(symptoms[key]).length > 0;
-  }
-  function getDayEmoji(date) {
+  function getDayEmojis(date) {
     const d = getSymptomsForDay(date);
-    // Humor — índices: 0=😊 1=😤 2=😢 3=😰 4=😐
+    const emojis = [];
     const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
-    if (d.humor !== null && d.humor !== undefined) return HUMOR_EMOJIS[d.humor] || "😊";
-    // Energia — índices: 0=🔋 1=🔶 2=🪫
     const ENERGIA_EMOJIS = ["🔋","🔶","🪫"];
-    if (d.energia !== null && d.energia !== undefined) return ENERGIA_EMOJIS[d.energia] || "🔋";
-    // Anticonceptivos (cualquier índice)
-    if (d.contra !== null && d.contra !== undefined) return "💊";
-    // Relaciones sexuales (índice > 0 = sí)
-    if (d.sex !== null && d.sex !== undefined && d.sex > 0) return "🫀";
-    // ITS (índice > 0 = enfermedad)
-    if (d.its !== null && d.its !== undefined && d.its > 0) return "🦠";
-    // Salud general (índice > 0)
-    if (d.enfermedad !== null && d.enfermedad !== undefined && d.enfermedad > 0) return "🤒";
-    // Dolor (índice > 0 = hay dolor)
-    if (d.dolor !== null && d.dolor !== undefined && d.dolor > 0) return "🩹";
-    // Hinchazón (índice 1 = sí)
-    if (d.hinchazon === 1) return "🫧";
-    // Flujo (índice > 0)
-    if (d.flujo !== null && d.flujo !== undefined && d.flujo > 0) return "💧";
-    return null;
+    if (d.humor !== null && d.humor !== undefined) emojis.push(HUMOR_EMOJIS[d.humor] || "😊");
+    if (d.energia !== null && d.energia !== undefined) emojis.push(ENERGIA_EMOJIS[d.energia] || "🔋");
+    if (d.contra !== null && d.contra !== undefined) emojis.push("💊");
+    if (d.sex !== null && d.sex !== undefined && d.sex > 0) emojis.push("🫀");
+    if (d.its !== null && d.its !== undefined && d.its > 0) emojis.push("🦠");
+    if (d.enfermedad !== null && d.enfermedad !== undefined && d.enfermedad > 0) emojis.push("🤒");
+    if (d.dolor !== null && d.dolor !== undefined && d.dolor > 0) emojis.push("🩹");
+    if (d.hinchazon === 1) emojis.push("🫧");
+    if (d.flujo !== null && d.flujo !== undefined && d.flujo > 0) emojis.push("💧");
+    return emojis;
   }
 
   const realCycle = calcRealCycle(entries);
@@ -1128,8 +1262,8 @@ export default function App() {
                     const isToday = isSameDay(date, today), isPeriod = isPeriodDay(date);
                     const isPending = isPendingStart(date), isInRange = isPendingRange(date);
                     const ovInfo = getOvulationInfo(date);
-                    const hasSym = hasSymptoms(date);
-                    const dayEmoji = getDayEmoji(date);
+
+                    const dayEmojis = getDayEmojis(date);
                     let bg = "transparent";
                     if (isPeriod) bg = "#f9d8e0";
                     if (isInRange && !isPeriod) bg = "#fceef0";
@@ -1137,7 +1271,11 @@ export default function App() {
                     return (
                       <div key={date.getTime()} onClick={() => handleDayClick(date)} style={{ ...S.dayCell, background: bg, border: isToday ? "2px solid #c4606f" : "2px solid transparent", cursor: "pointer" }}>
                         {ovInfo && <div style={{ position: "absolute", top: 1, right: 1 }}><FlowerIcon fertility={ovInfo.fertility} /></div>}
-                        {dayEmoji && <div style={{ position: "absolute", bottom: 1, left: "50%", transform: "translateX(-50%)", fontSize: 8, lineHeight: 1 }}>{dayEmoji}</div>}
+                        {dayEmojis.length > 0 && (
+                          <div style={{ position: "absolute", bottom: 1, left: "50%", transform: "translateX(-50%)", fontSize: 7, lineHeight: 1, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 0, maxWidth: "100%" }}>
+                            {dayEmojis.slice(0,4).join("")}
+                          </div>
+                        )}
                         <span style={{ fontSize: 13, fontWeight: isToday ? 700 : 400, color: isPending ? "#fff" : isPeriod ? "#c4606f" : "#3d2c2c" }}>{date.getDate()}</span>
                       </div>
                     );
@@ -1198,6 +1336,7 @@ export default function App() {
       loadHoroscope(sign);
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
       if (savedSign && !horoscope) {
         const idx = parseInt(localStorage.getItem("horoscope-index") || "0");
@@ -1285,7 +1424,7 @@ export default function App() {
                 </div>
                 <div style={{ background: "#f8f8fd", borderRadius: 12, padding: "12px 14px", fontSize: 12, color: "#3d2c2c", lineHeight: 1.7 }}>
                   <div style={{ fontWeight: 700, color: "#6060a0", marginBottom: 4 }}>🌙 {lang==="en"?"Your lunar emotions":lang==="pt"?"Suas emoções lunares":lang==="it"?"Le tue emozioni lunari":"Tus emociones lunares"}</div>
-                  {lang==="en" ? `Your Moon in ${ZODIAC_NAMES[birthChart.luna.idx]} shapes how you feel and process emotions.` : lang==="pt" ? `Sua Lua em ${ZODIAC_NAMES[birthChart.luna.idx]} molda como você sente e processa as emoções.` : lang==="it" ? `La tua Luna in ${ZODIAC_NAMES[birthChart.luna.idx]} plasma come senti ed elabori le emozioni.` : `Tu Luna en ${ZODIAC_NAMES[birthChart.luna.idx]} determina cómo sientes y procesas las emociones.`} {SIGN_PERSONALITY[birthChart.luna.idx]}
+                  {lang==="en" ? `Your Moon in ${ZODIAC_NAMES[birthChart.luna.idx]} shapes how you feel and process emotions.` : lang==="pt" ? `Sua Lua em ${ZODIAC_NAMES[birthChart.luna.idx]} molda como você sente e processa as emoções.` : lang==="it" ? `La tua Luna in ${ZODIAC_NAMES[birthChart.luna.idx]} plasma come senti ed elabori le emozioni.` : `Tu Luna en ${ZODIAC_NAMES[birthChart.luna.idx]} determina cómo sientes y procesas las emociones.`} {LUNA_PERSONALITY[birthChart.luna.idx]}
                 </div>
                 <div style={{ background: "#f0f8f0", borderRadius: 12, padding: "12px 14px", fontSize: 12, color: "#3d2c2c", lineHeight: 1.7 }}>
                   <div style={{ fontWeight: 700, color: "#407040", marginBottom: 4 }}>⬆️ {lang==="en"?"How others see you":lang==="pt"?"Como os outros te veem":lang==="it"?"Come gli altri ti vedono":"Cómo te ven los demás"}</div>
@@ -1387,21 +1526,6 @@ export default function App() {
   function HomeScreen() {
     const ovToday = getOvulationInfo(today);
 
-    // Calcular próximos 3 períodos
-    function getNextPeriods() {
-      if (!entries.length) return [];
-      const sorted = [...entries].sort((a, b) => new Date(a.start) - new Date(b.start));
-      const lastStart = new Date(sorted[sorted.length - 1].start);
-      const periods = [];
-      for (let i = 1; i <= 3; i++) {
-        const date = addDays(lastStart, cycleLength * i);
-        if (date > today) periods.push(date);
-      }
-      return periods.slice(0, 1);
-    }
-
-    const nextPeriods = getNextPeriods();
-
     return (
       <div style={S.home}>
         <div style={S.homeHeader}>
@@ -1427,11 +1551,7 @@ export default function App() {
           </span>
         </div>
         <div style={S.circleWrap}>
-          <div style={{ ...S.circle, background: activePeriod ? "#c4606f" : "linear-gradient(135deg, #d4788a, #e8a0aa)" }}>
-            <div style={S.circleNumber}>{statusNumber !== null ? statusNumber : "—"}</div>
-            <div style={S.circleLabel}>{statusText}</div>
-          </div>
-          <div style={S.statusSub}>{statusSub}</div>
+          <CycleWheel entries={entries} cycleLength={cycleLength} nextPeriodStart={nextPeriodStart} ovulationDays={ovulationDays} today={today} t={t} lang={lang} activePeriod={activePeriod} statusNumber={statusNumber} statusText={statusText} statusSub={statusSub} />
         </div>
 
         <div style={S.actionRow}>
@@ -1483,7 +1603,6 @@ export default function App() {
     const dolorStats = countByIndex("dolor", t.dolorOpts).filter(([v]) => v !== t.dolorOpts[0]);
     const energiaStats = countByIndex("energia", t.energiaOpts);
     const flujoStats = countByIndex("flujo", t.flujoOpts).filter(([v]) => v !== t.flujoOpts[0]);
-    const hinchazonSi = allEntries.filter(e => e.data.hinchazon === 1).length;
     const contraStats = countByIndex("contra", t.contraOpts);
     const sexStats = countByIndex("sex", t.sexOpts).filter(([v]) => v !== t.sexOpts[0]);
     const itsStats = countByIndex("its", t.itsOpts).filter(([v]) => v !== t.itsOpts[0]);
@@ -1492,19 +1611,81 @@ export default function App() {
     const firstDate = allEntries.length > 0 ? allEntries[0].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
     const lastDate = allEntries.length > 0 ? allEntries[allEntries.length-1].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
 
-    function StatBar({ label, count, max, color }) {
+    function StatBar({ label, dates, color }) {
+      const [expanded, setExpanded] = useState(false);
       return (
         <div style={{ marginBottom: 10 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, cursor: "pointer" }} onClick={() => setExpanded(e => !e)}>
             <span style={{ fontSize: 12, color: "#3d2c2c" }}>{label}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#c4606f" }}>{count} {t.statsDays}</span>
+            <span style={{ fontSize: 11, color, fontWeight: 600 }}>{dates.length}× {expanded ? "▲" : "▼"}</span>
           </div>
-          <div style={{ background: "#f9f0f1", borderRadius: 99, height: 8 }}>
-            <div style={{ width: max > 0 ? `${(count / max) * 100}%` : "0%", height: "100%", background: color || "#d4788a", borderRadius: 99, transition: "width 0.5s" }} />
+          <div style={{ background: "#f9f0f1", borderRadius: 99, height: 7, marginBottom: expanded ? 8 : 0 }}>
+            <div style={{ width: `${(dates.length / total) * 100}%`, height: "100%", background: color || "#d4788a", borderRadius: 99 }} />
           </div>
+          {expanded && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+              {dates.map(dateKey => (
+                <div key={dateKey} style={{ display: "flex", alignItems: "center", gap: 4, background: "#fdf0f2", borderRadius: 8, padding: "3px 8px" }}>
+                  <span style={{ fontSize: 11, color: "#3d2c2c" }}>{new Date(dateKey).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}</span>
+                  <button onClick={() => {
+                    const updated = { ...symptoms };
+                    if (updated[dateKey]) {
+                      delete updated[dateKey];
+                      setSymptoms(updated);
+                      localStorage.setItem("symptoms", JSON.stringify(updated));
+                    }
+                  }} style={{ background: "none", border: "none", color: "#c4606f", cursor: "pointer", fontSize: 12, padding: 0, lineHeight: 1 }}>✕</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       );
     }
+
+    function countWithDates(field, opts, skipFirst = false) {
+      const map = {};
+      allEntries.forEach(({ date, data }) => {
+        const idx = data[field];
+        if (idx === null || idx === undefined) return;
+        if (skipFirst && idx === 0) return;
+        const label = opts?.[idx] ?? String(idx);
+        if (!map[label]) map[label] = [];
+        map[label].push(date.toISOString().slice(0,10));
+      });
+      return Object.entries(map).sort((a, b) => b[1].length - a[1].length);
+    }
+
+    const HUMOR_EMOJIS = ["😊","😤","😢","😰","😐"];
+    const humorMap = {};
+    allEntries.forEach(({ date, data }) => {
+      if (data.humor === null || data.humor === undefined) return;
+      const label = t.humorOpts[data.humor] || String(data.humor);
+      if (!humorMap[label]) humorMap[label] = [];
+      humorMap[label].push(date.toISOString().slice(0,10));
+    });
+    const humorStats = Object.entries(humorMap).sort((a,b) => b[1].length - a[1].length);
+
+    const energiaMap = {};
+    allEntries.forEach(({ date, data }) => {
+      if (data.energia === null || data.energia === undefined) return;
+      const label = t.energiaOpts[data.energia] || String(data.energia);
+      if (!energiaMap[label]) energiaMap[label] = [];
+      energiaMap[label].push(date.toISOString().slice(0,10));
+    });
+    const energiaStats = Object.entries(energiaMap).sort((a,b) => b[1].length - a[1].length);
+
+    const dolorStats = countWithDates("dolor", t.dolorOpts, true);
+    const flujoStats = countWithDates("flujo", t.flujoOpts, true);
+    const contraStats = countWithDates("contra", t.contraOpts, false);
+    const sexStats = countWithDates("sex", t.sexOpts, true);
+    const itsStats = countWithDates("its", t.itsOpts, true);
+    const enfermedadStats = countWithDates("enfermedad", t.enfermedadOpts, true);
+
+    const hinchazonDates = allEntries.filter(e => e.data.hinchazon === 1).map(e => e.date.toISOString().slice(0,10));
+
+    const firstDate = allEntries.length > 0 ? allEntries[0].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
+    const lastDate = allEntries.length > 0 ? allEntries[allEntries.length-1].date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : "";
 
     return (
       <div style={{ ...S.horScreen, paddingBottom: 80 }}>
@@ -1525,62 +1706,20 @@ export default function App() {
                 {t.statsResumenText} <span style={{ fontWeight: 700, color: "#c4606f" }}>{total} {t.statsDays}</span> {t.statsResumenText2}
               </p>
               {firstDate && <p style={{ fontSize: 11, color: "#b8a8a8", marginTop: 4 }}>📅 {firstDate} → {lastDate}</p>}
+              <p style={{ fontSize: 10, color: "#c8b8b8", marginTop: 6, fontStyle: "italic" }}>
+                {lang==="en"?"Tap any row to see dates and delete entries":lang==="pt"?"Toque numa linha para ver datas e eliminar":lang==="it"?"Tocca una riga per vedere date ed eliminare":"Toca una fila para ver fechas y eliminar entradas"}
+              </p>
             </div>
 
-            {humorStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.humor}</div>
-                <div style={{ marginTop: 12 }}>{humorStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#d4788a" />)}</div>
-              </div>
-            )}
-            {energiaStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.energia}</div>
-                <div style={{ marginTop: 12 }}>{energiaStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#b07050" />)}</div>
-              </div>
-            )}
-            {dolorStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.dolor}</div>
-                <div style={{ marginTop: 12 }}>{dolorStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#c4606f" />)}</div>
-              </div>
-            )}
-            {flujoStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.flujo}</div>
-                <div style={{ marginTop: 12 }}>{flujoStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a9ec4" />)}</div>
-              </div>
-            )}
-            {hinchazonSi > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.hinchazon}</div>
-                <div style={{ marginTop: 12 }}><StatBar label={t.hinchazonOpts[1]} count={hinchazonSi} max={total} color="#c4a0c4" /></div>
-              </div>
-            )}
-            {contraStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.contraLabel}</div>
-                <div style={{ marginTop: 12 }}>{contraStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a6090" />)}</div>
-              </div>
-            )}
-            {sexStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.sexLabel}</div>
-                <div style={{ marginTop: 12 }}>{sexStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#b07080" />)}</div>
-              </div>
-            )}
-            {enfermedadStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.enfermedadLabel}</div>
-                <div style={{ marginTop: 12 }}>{enfermedadStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#7a9e7e" />)}</div>
-              </div>
-            )}
-            {itsStats.length > 0 && (
-              <div style={S.statCard}>
-                <div style={S.statTitle}>{t.itsLabel}</div>
-                <div style={{ marginTop: 12 }}>{itsStats.map(([val, count]) => <StatBar key={val} label={val} count={count} max={total} color="#8a7e9e" />)}</div>
-              </div>
-            )}
+            {humorStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.humor}</div><div style={{ marginTop: 12 }}>{humorStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#d4788a" />)}</div></div>}
+            {energiaStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.energia}</div><div style={{ marginTop: 12 }}>{energiaStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#b07050" />)}</div></div>}
+            {dolorStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.dolor}</div><div style={{ marginTop: 12 }}>{dolorStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#c4606f" />)}</div></div>}
+            {flujoStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.flujo}</div><div style={{ marginTop: 12 }}>{flujoStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#8a9ec4" />)}</div></div>}
+            {hinchazonDates.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.hinchazon}</div><div style={{ marginTop: 12 }}><StatBar label={t.hinchazonOpts[1]} dates={hinchazonDates} color="#c4a0c4" /></div></div>}
+            {contraStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.contraLabel}</div><div style={{ marginTop: 12 }}>{contraStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#8a6090" />)}</div></div>}
+            {sexStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.sexLabel}</div><div style={{ marginTop: 12 }}>{sexStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#b07080" />)}</div></div>}
+            {enfermedadStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.enfermedadLabel}</div><div style={{ marginTop: 12 }}>{enfermedadStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#7a9e7e" />)}</div></div>}
+            {itsStats.length > 0 && <div style={S.statCard}><div style={S.statTitle}>{t.itsLabel}</div><div style={{ marginTop: 12 }}>{itsStats.map(([val, dates]) => <StatBar key={val} label={val} dates={dates} color="#8a7e9e" />)}</div></div>}
           </div>
         )}
       </div>
