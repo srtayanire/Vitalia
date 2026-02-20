@@ -53,6 +53,23 @@ const TRANSLATIONS = {
     langTitle: "🌐 Idioma",
     horTitle: "🔮 Horóscopo", chooseSign: "Elige tu signo del zodiaco", planetsToday: "🪐 Posiciones planetarias de hoy",
     notifPeriod: "Mañana empieza tu período. ¡Prepárate!", notifOvulation: "Hoy es tu día de ovulación — máxima fertilidad.",
+    phases: {
+      menstruacion: { nombre: "Menstruación", dias: "Días 1–5" },
+      folicular: { nombre: "Fase Folicular", dias: "Días 6–13" },
+      ovulacion: { nombre: "Ovulación", dias: "Día ~14" },
+      lutea: { nombre: "Fase Lútea", dias: "Días 15–28" },
+    },
+    horDesc: {
+      "Estrógeno": ["Muy bajo","Subiendo rápido","Pico máximo","Bajando"],
+      "Progesterona": ["Muy baja","Todavía baja","Empieza a subir","Pico alto"],
+      "FSH": ["Empieza a subir","Alta, estimula folículos","Bajando","Baja"],
+      "LH": ["Baja","Empieza a subir","Pico ovulatorio","Baja"],
+      "Testosterona": ["Baja","Subiendo","Pico","Bajando"],
+    },
+    horSections: { general: "✨ General", amor: "💖 Amor", salud: "🌿 Salud", trabajo: "💼 Trabajo", consejo: "🌙 Consejo del día" },
+    horFooter: "Basado en posiciones astronómicas reales calculadas para hoy",
+    horChange: "Cambiar",
+    signs: ["Aries","Tauro","Géminis","Cáncer","Leo","Virgo","Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"],
   },
   en: {
     appName: "Vitalia", welcome: "Welcome to Vitalia",
@@ -98,6 +115,23 @@ const TRANSLATIONS = {
     langTitle: "🌐 Language",
     horTitle: "🔮 Horoscope", chooseSign: "Choose your zodiac sign", planetsToday: "🪐 Today's planetary positions",
     notifPeriod: "Your period starts tomorrow. Get ready!", notifOvulation: "Today is your ovulation day — peak fertility.",
+    phases: {
+      menstruacion: { nombre: "Menstruation", dias: "Days 1–5" },
+      folicular: { nombre: "Follicular Phase", dias: "Days 6–13" },
+      ovulacion: { nombre: "Ovulation", dias: "Day ~14" },
+      lutea: { nombre: "Luteal Phase", dias: "Days 15–28" },
+    },
+    horDesc: {
+      "Estrógeno": ["Very low","Rising fast","Peak","Dropping"],
+      "Progesterona": ["Very low","Still low","Starting to rise","Peak high"],
+      "FSH": ["Starting to rise","High, stimulates follicles","Dropping","Low"],
+      "LH": ["Low","Starting to rise","Ovulatory peak","Low"],
+      "Testosterona": ["Low","Rising","Peak","Dropping"],
+    },
+    horSections: { general: "✨ General", amor: "💖 Love", salud: "🌿 Health", trabajo: "💼 Work", consejo: "🌙 Daily tip" },
+    horFooter: "Based on real astronomical positions calculated for today",
+    horChange: "Change",
+    signs: ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"],
   },
   pt: {
     appName: "Vitalia", welcome: "Bem-vinda ao Vitalia",
@@ -143,6 +177,23 @@ const TRANSLATIONS = {
     langTitle: "🌐 Idioma",
     horTitle: "🔮 Horóscopo", chooseSign: "Escolha o seu signo do zodíaco", planetsToday: "🪐 Posições planetárias de hoje",
     notifPeriod: "A sua menstruação começa amanhã. Prepare-se!", notifOvulation: "Hoje é o seu dia de ovulação — máxima fertilidade.",
+    phases: {
+      menstruacion: { nombre: "Menstruação", dias: "Dias 1–5" },
+      folicular: { nombre: "Fase Folicular", dias: "Dias 6–13" },
+      ovulacion: { nombre: "Ovulação", dias: "Dia ~14" },
+      lutea: { nombre: "Fase Lútea", dias: "Dias 15–28" },
+    },
+    horDesc: {
+      "Estrógeno": ["Muito baixo","A subir rápido","Pico máximo","A descer"],
+      "Progesterona": ["Muito baixa","Ainda baixa","A começar a subir","Pico alto"],
+      "FSH": ["A começar a subir","Alta, estimula folículos","A descer","Baixa"],
+      "LH": ["Baixa","A começar a subir","Pico ovulatório","Baixa"],
+      "Testosterona": ["Baixa","A subir","Pico","A descer"],
+    },
+    horSections: { general: "✨ Geral", amor: "💖 Amor", salud: "🌿 Saúde", trabajo: "💼 Trabalho", consejo: "🌙 Conselho do dia" },
+    horFooter: "Baseado em posições astronômicas reais calculadas para hoje",
+    horChange: "Alterar",
+    signs: ["Áries","Touro","Gémeos","Caranguejo","Leão","Virgem","Balança","Escorpião","Sagitário","Capricórnio","Aquário","Peixes"],
   },
   it: {
     appName: "Vitalia", welcome: "Benvenuta in Vitalia",
@@ -188,6 +239,23 @@ const TRANSLATIONS = {
     langTitle: "🌐 Lingua",
     horTitle: "🔮 Oroscopo", chooseSign: "Scegli il tuo segno zodiacale", planetsToday: "🪐 Posizioni planetarie di oggi",
     notifPeriod: "Il tuo ciclo inizia domani. Preparati!", notifOvulation: "Oggi è il tuo giorno di ovulazione — massima fertilità.",
+    phases: {
+      menstruacion: { nombre: "Mestruazione", dias: "Giorni 1–5" },
+      folicular: { nombre: "Fase Follicolare", dias: "Giorni 6–13" },
+      ovulacion: { nombre: "Ovulazione", dias: "Giorno ~14" },
+      lutea: { nombre: "Fase Luteale", dias: "Giorni 15–28" },
+    },
+    horDesc: {
+      "Estrógeno": ["Molto basso","In rapida salita","Picco massimo","In calo"],
+      "Progesterona": ["Molto bassa","Ancora bassa","Inizia a salire","Picco alto"],
+      "FSH": ["Inizia a salire","Alta, stimola i follicoli","In calo","Bassa"],
+      "LH": ["Bassa","Inizia a salire","Picco ovulatorio","Bassa"],
+      "Testosterona": ["Bassa","In salita","Picco","In calo"],
+    },
+    horSections: { general: "✨ Generale", amor: "💖 Amore", salud: "🌿 Salute", trabajo: "💼 Lavoro", consejo: "🌙 Consiglio del giorno" },
+    horFooter: "Basato su posizioni astronomiche reali calcolate per oggi",
+    horChange: "Cambia",
+    signs: ["Ariete","Toro","Gemelli","Cancro","Leone","Vergine","Bilancia","Scorpione","Sagittario","Capricorno","Acquario","Pesci"],
   },
 };
 
@@ -266,10 +334,10 @@ function getPhaseInfo(entries, cycleLength = 28) {
   const today = startOfDay(new Date());
   const dayOfCycle = daysBetween(startOfDay(lastStart), today) + 1;
   const n = ((dayOfCycle - 1) % cycleLength) + 1;
-  if (n <= 5) return { phase: PHASE_DATA.menstruacion, dayOfCycle: n };
-  if (n <= 13) return { phase: PHASE_DATA.folicular, dayOfCycle: n };
-  if (n === 14) return { phase: PHASE_DATA.ovulacion, dayOfCycle: n };
-  return { phase: PHASE_DATA.lutea, dayOfCycle: n };
+  if (n <= 5) return { phase: PHASE_DATA.menstruacion, phaseKey: "menstruacion", dayOfCycle: n };
+  if (n <= 13) return { phase: PHASE_DATA.folicular, phaseKey: "folicular", dayOfCycle: n };
+  if (n === 14) return { phase: PHASE_DATA.ovulacion, phaseKey: "ovulacion", dayOfCycle: n };
+  return { phase: PHASE_DATA.lutea, phaseKey: "lutea", dayOfCycle: n };
 }
 
 function computePredictions(entries, cycleLength = 28, lutealPhase = 14) {
@@ -461,7 +529,97 @@ function interpretPlanets(signIdx, p) {
   return { general, amor, salud, trabajo, consejo };
 }
 
-// ─── App principal ────────────────────────────────────────────────────────────
+// ─── Carta Astral ─────────────────────────────────────────────────────────────
+
+function calcBirthChart(birthDate, birthHour, birthMin, birthLat = 40.4) {
+  const norm = lon => ((lon % 360) + 360) % 360;
+  const signIdx = lon => Math.floor(norm(lon) / 30);
+  const label = lon => `${Math.round(norm(lon) % 30)}° ${ZODIAC_NAMES[signIdx(lon)]}`;
+
+  const jd = (birthDate.getTime() / 86400000) + 2440587.5;
+  const d = jd - 2451545.0;
+
+  // Sol (signo solar)
+  const Ms = (357.5291 + 0.98560028 * d) * Math.PI / 180;
+  const lonSun = norm(280.4665 + 0.98564736*d + 1.9148*Math.sin(Ms) + 0.02*Math.sin(2*Ms));
+
+  // Luna (signo lunar)
+  const Mm = (134.963 + 13.064993 * d) * Math.PI / 180;
+  const L0r = (218.316 + 13.176396 * d) * Math.PI / 180;
+  const lonMoon = norm(218.316 + 13.176396*d + 6.289*Math.sin(Mm) + 0.658*Math.sin(2*L0r) - 0.214*Math.sin(2*Mm) - 0.11*Math.sin(L0r));
+
+  // Ascendente (depende de hora y latitud)
+  const RAMC = norm(100.4606184 + 36000.77004 * (d / 36525) + (birthHour + birthMin/60) * 15);
+  const eps = 23.4393 * Math.PI / 180;
+  const latRad = birthLat * Math.PI / 180;
+  const RARad = RAMC * Math.PI / 180;
+  const ascRad = Math.atan2(Math.cos(RARad), -(Math.sin(RARad) * Math.cos(eps) + Math.tan(latRad) * Math.sin(eps)));
+  const lonAsc = norm(ascRad * 180 / Math.PI);
+
+  // Planetas en casas (sistema Placidus simplificado - usamos casas de 30° desde ascendente)
+  const houseOf = lon => ((Math.floor(norm(lon - lonAsc) / 30)) % 12) + 1;
+
+  // Otros planetas
+  const Mv = (212.2606 + 1.6021302 * d) * Math.PI / 180;
+  const lonVenus = norm(76.68 + 1.60213*d + 0.7758*Math.sin(Mv));
+  const Mma = (319.5294 + 0.5240207 * d) * Math.PI / 180;
+  const lonMars = norm(49.558 + 0.52403*d + 10.6912*Math.sin(Mma));
+  const Mme = (168.6562 + 4.0923344 * d) * Math.PI / 180;
+  const lonMerc = norm(48.331 + 4.09235*d + 23.4405*Math.sin(Mme));
+  const Mj = (19.895 + 0.0830853 * d) * Math.PI / 180;
+  const lonJup = norm(100.464 + 0.08309*d + 5.5549*Math.sin(Mj));
+  const Ms2 = (316.967 + 0.0334442 * d) * Math.PI / 180;
+  const lonSat = norm(135.543 + 0.03344*d + 6.3585*Math.sin(Ms2));
+
+  return {
+    sol:      { idx: signIdx(lonSun),   label: label(lonSun),   casa: houseOf(lonSun) },
+    luna:     { idx: signIdx(lonMoon),  label: label(lonMoon),  casa: houseOf(lonMoon) },
+    asc:      { idx: signIdx(lonAsc),   label: label(lonAsc) },
+    venus:    { idx: signIdx(lonVenus), label: label(lonVenus), casa: houseOf(lonVenus) },
+    marte:    { idx: signIdx(lonMars),  label: label(lonMars),  casa: houseOf(lonMars) },
+    mercurio: { idx: signIdx(lonMerc),  label: label(lonMerc),  casa: houseOf(lonMerc) },
+    jupiter:  { idx: signIdx(lonJup),   label: label(lonJup),   casa: houseOf(lonJup) },
+    saturno:  { idx: signIdx(lonSat),   label: label(lonSat),   casa: houseOf(lonSat) },
+  };
+}
+
+const HOUSE_MEANINGS = [
+  "identidad y apariencia","dinero y valores","comunicación y mente",
+  "hogar y familia","creatividad y placer","salud y trabajo",
+  "relaciones y parejas","transformación y sexualidad","filosofía y viajes",
+  "carrera y reputación","amistades y grupos","espiritualidad y karma"
+];
+
+const SIGN_PERSONALITY = [
+  "Eres directa, valiente y apasionada. Tu energía es contagiosa y lideras de forma natural.",
+  "Eres perseverante, sensual y leal. Valoras la estabilidad y disfrutas los placeres de la vida.",
+  "Eres curiosa, adaptable y brillante. Tu mente está siempre activa y te encanta aprender.",
+  "Eres intuitiva, protectora y profundamente emocional. Tu hogar y familia son tu centro.",
+  "Eres generosa, carismática y creativa. Tienes un brillo natural que atrae a los demás.",
+  "Eres analítica, detallista y práctica. Buscas la perfección y te entrega a lo que haces.",
+  "Eres diplomática, encantadora y justa. Buscas el equilibrio y la armonía en todo.",
+  "Eres intensa, magnética y transformadora. Vas siempre a las profundidades de todo.",
+  "Eres aventurera, optimista y filosófica. Tu espíritu libre busca siempre nuevos horizontes.",
+  "Eres ambiciosa, disciplinada y responsable. Tu perseverancia te lleva lejos.",
+  "Eres original, humanista e independiente. Piensas de forma única y valoras la libertad.",
+  "Eres empática, creativa e intuitiva. Absorbes las emociones del entorno y eres muy sensible.",
+];
+
+const ASC_MEANINGS = [
+  "Proyectas energía, determinación y seguridad. Los demás te ven como una persona directa y valiente.",
+  "Proyectas calma, fiabilidad y elegancia. Los demás te ven como alguien estable y con los pies en la tierra.",
+  "Proyectas inteligencia, vivacidad y versatilidad. Los demás te ven como alguien ingeniosa y comunicativa.",
+  "Proyectas ternura, empatía y cuidado. Los demás te ven como una persona sensible y acogedora.",
+  "Proyectas carisma, confianza y generosidad. Los demás te ven como alguien luminosa y con presencia.",
+  "Proyectas precisión, modestia y eficiencia. Los demás te ven como alguien organizada y detallista.",
+  "Proyectas encanto, diplomacia y elegancia. Los demás te ven como alguien equilibrada y agradable.",
+  "Proyectas intensidad, misterio y magnetismo. Los demás te ven como alguien profunda e impenetrable.",
+  "Proyectas entusiasmo, optimismo y libertad. Los demás te ven como alguien aventurera y abierta.",
+  "Proyectas seriedad, ambición y confiabilidad. Los demás te ven como alguien responsable y madura.",
+  "Proyectas originalidad, independencia y modernidad. Los demás te ven como alguien única e impredecible.",
+  "Proyectas sensibilidad, misticismo y dulzura. Los demás te ven como alguien soñadora y compasiva.",
+];
+
 
 export default function App() {
   const [screen, setScreen] = useState("home");
@@ -482,6 +640,16 @@ export default function App() {
   const [notifPermission, setNotifPermission] = useState(() => "Notification" in window ? Notification.permission : "unsupported");
   const [symptoms, setSymptoms] = useState(() => {
     try { return JSON.parse(localStorage.getItem("symptoms") || "{}"); } catch { return {}; }
+  });
+  const [birthData, setBirthData] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("birth-data") || "null"); } catch { return null; }
+  });
+  const [birthChart, setBirthChart] = useState(() => {
+    try {
+      const bd = JSON.parse(localStorage.getItem("birth-data") || "null");
+      if (!bd) return null;
+      return calcBirthChart(new Date(bd.date), bd.hour, bd.min);
+    } catch { return null; }
   });
 
   useEffect(() => { localStorage.setItem("period-entries", JSON.stringify(entries)); }, [entries]);
@@ -558,9 +726,11 @@ export default function App() {
   function handleEndPeriod() { if (!activePeriod) return; setEntries(prev => prev.map(e => e.id === activePeriod.id ? { ...e, end: new Date() } : e)); }
   function deleteEntry(id) { setEntries(prev => prev.filter(e => e.id !== id)); }
 
+  const locale = lang === "en" ? "en-GB" : lang === "pt" ? "pt-PT" : lang === "it" ? "it-IT" : "es-ES";
+
   let statusText = "", statusSub = "", statusNumber = null;
   if (activePeriod) { statusNumber = daysBetween(new Date(activePeriod.start), today) + 1; statusText = t.periodActive; statusSub = ""; }
-  else if (nextPeriodStart) { const diff = daysBetween(today, nextPeriodStart); statusNumber = Math.abs(diff); statusText = diff >= 0 ? t.daysUntilPeriod : t.periodDelay; statusSub = diff >= 0 ? `${nextPeriodStart.toLocaleDateString(lang === "en" ? "en-GB" : lang === "pt" ? "pt-PT" : lang === "it" ? "it-IT" : "es-ES", { day: "numeric", month: "long" })}` : "⚠️"; }
+  else if (nextPeriodStart) { const diff = daysBetween(today, nextPeriodStart); statusNumber = Math.abs(diff); statusText = diff >= 0 ? t.daysUntilPeriod : t.periodDelay; statusSub = diff >= 0 ? `${nextPeriodStart.toLocaleDateString(locale, { day: "numeric", month: "long" })}` : "⚠️"; }
   else { statusText = t.registerPeriod; statusSub = ""; }
 
   // ─── Onboarding ──────────────────────────────────────────────────────────────
@@ -618,17 +788,23 @@ export default function App() {
         <p style={{ fontSize: 13, color: "#9ca3af", marginTop: 8 }}>{t.registerPeriod}</p>
       </div>
     );
-    const { phase, dayOfCycle } = phaseInfo;
+    const { phase, phaseKey, dayOfCycle } = phaseInfo;
+    const phaseTrans = t.phases?.[phaseKey] || { nombre: phase.nombre, dias: phase.dias };
+    const phaseIdx = ["menstruacion","folicular","ovulacion","lutea"].indexOf(phaseKey);
     const tabs = [{ id: "hormonas", label: "🧪 Hormonas" }, { id: "fisico", label: "💪 Físico" }, { id: "emocional", label: "💜 Emocional" }, { id: "consejos", label: "✨ Consejos" }];
     return (
       <div style={S.hormoneCard}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
           <div style={{ fontSize: 28 }}>{phase.emoji}</div>
-          <div><div style={{ fontSize: 15, fontWeight: 700, color: phase.colorDark }}>{phase.nombre}</div><div style={{ fontSize: 11, color: "#9ca3af" }}>{phase.dias} · Día {dayOfCycle} de tu ciclo</div></div>
+          <div><div style={{ fontSize: 15, fontWeight: 700, color: phase.colorDark }}>{phaseTrans.nombre}</div><div style={{ fontSize: 11, color: "#9ca3af" }}>{phaseTrans.dias} · Día {dayOfCycle} de tu ciclo</div></div>
         </div>
-        <div style={S.tabRow}>{tabs.map(t => <button key={t.id} onClick={() => setHormoneTab(t.id)} style={{ ...S.tab, background: hormoneTab === t.id ? phase.colorDark : "#f3f4f6", color: hormoneTab === t.id ? "#fff" : "#6b7280" }}>{t.label}</button>)}</div>
+        <div style={S.tabRow}>{tabs.map(tab => <button key={tab.id} onClick={() => setHormoneTab(tab.id)} style={{ ...S.tab, background: hormoneTab === tab.id ? phase.colorDark : "#f3f4f6", color: hormoneTab === tab.id ? "#fff" : "#6b7280" }}>{tab.label}</button>)}</div>
         <div style={{ marginTop: 14 }}>
-          {hormoneTab === "hormonas" && <div>{phase.hormonas.map(h => <HormoneBar key={h.nombre} {...h} color={phase.colorDark} />)}<p style={{ fontSize: 11, color: "#9ca3af", marginTop: 8, fontStyle: "italic" }}>Estimación basada en tu ciclo. No sustituye a un análisis médico.</p></div>}
+          {hormoneTab === "hormonas" && <div>{phase.hormonas.map(h => {
+            const descArr = t.horDesc?.[h.nombre];
+            const desc = descArr ? descArr[phaseIdx] : h.descripcion;
+            return <HormoneBar key={h.nombre} nombre={h.nombre} nivel={h.nivel} descripcion={desc} color={phase.colorDark} />;
+          })}<p style={{ fontSize: 11, color: "#9ca3af", marginTop: 8, fontStyle: "italic" }}>Estimación basada en tu ciclo. No sustituye a un análisis médico.</p></div>}
           {hormoneTab === "fisico" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>Síntomas físicos más probables ahora:</p>{phase.fisico.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
           {hormoneTab === "emocional" && <div><p style={{ fontSize: 12, color: "#6b7280", marginBottom: 10 }}>Cómo puedes sentirte emocionalmente:</p>{phase.emocional.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
           {hormoneTab === "consejos" && <div><p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, marginBottom: 6 }}>🥗 Alimentación</p>{phase.consejos.alimentacion.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}<p style={{ fontSize: 12, fontWeight: 600, color: phase.colorDark, margin: "14px 0 6px" }}>🏃 Ejercicio</p>{phase.consejos.ejercicio.map((item, i) => <div key={i} style={S.listItem}><span style={{ color: phase.colorDark, marginRight: 8 }}>●</span><span style={{ fontSize: 13, color: "#374151" }}>{item}</span></div>)}</div>}
@@ -658,7 +834,7 @@ export default function App() {
       showToast(t.symptomsSaved);
     }
 
-    const dateStr = date.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+    const dateStr = date.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
 
     return (
       <div style={S.panelOverlay} onClick={onClose}>
@@ -737,7 +913,7 @@ export default function App() {
             for (let d = 1; d <= getDaysInMonth(year, month); d++) cells.push(new Date(year, month, d));
             return (
               <div key={`${year}-${month}`} style={S.monthCard}>
-                <h3 style={S.monthLabel}>{monthDate.toLocaleDateString("es-ES", { month: "long", year: "numeric" })}</h3>
+                <h3 style={S.monthLabel}>{monthDate.toLocaleDateString(locale, { month: "long", year: "numeric" })}</h3>
                 <div style={S.weekRow}>{t.weekDays.map((d,i) => <div key={i} style={S.weekDay}>{d}</div>)}</div>
                 <div style={S.daysGrid}>
                   {cells.map((date, idx) => {
@@ -778,54 +954,187 @@ export default function App() {
 
   // ─── Horóscopo ───────────────────────────────────────────────────────────────
   function HoroscopeScreen() {
-    const SIGNS = [
-      { name: "Aries", emoji: "♈", dates: "21 mar – 19 abr", index: 0 },
-      { name: "Tauro", emoji: "♉", dates: "20 abr – 20 may", index: 1 },
-      { name: "Géminis", emoji: "♊", dates: "21 may – 20 jun", index: 2 },
-      { name: "Cáncer", emoji: "♋", dates: "21 jun – 22 jul", index: 3 },
-      { name: "Leo", emoji: "♌", dates: "23 jul – 22 ago", index: 4 },
-      { name: "Virgo", emoji: "♍", dates: "23 ago – 22 sep", index: 5 },
-      { name: "Libra", emoji: "♎", dates: "23 sep – 22 oct", index: 6 },
-      { name: "Escorpio", emoji: "♏", dates: "23 oct – 21 nov", index: 7 },
-      { name: "Sagitario", emoji: "♐", dates: "22 nov – 21 dic", index: 8 },
-      { name: "Capricornio", emoji: "♑", dates: "22 dic – 19 ene", index: 9 },
-      { name: "Acuario", emoji: "♒", dates: "20 ene – 18 feb", index: 10 },
-      { name: "Piscis", emoji: "♓", dates: "19 feb – 20 mar", index: 11 },
-    ];
+    const SIGN_DATES = ["21 mar – 19 abr","20 abr – 20 may","21 may – 20 jun","21 jun – 22 jul","23 jul – 22 ago","23 ago – 22 sep","23 sep – 22 oct","23 oct – 21 nov","22 nov – 21 dic","22 dic – 19 ene","20 ene – 18 feb","19 feb – 20 mar"];
+    const SIGN_EMOJIS = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+    const SIGNS = t.signs.map((name, i) => ({ name, emoji: SIGN_EMOJIS[i], dates: SIGN_DATES[i], index: i }));
 
     const savedSign = localStorage.getItem("horoscope-sign");
     const [selectedSign, setSelectedSign] = useState(savedSign || null);
     const [horoscope, setHoroscope] = useState(null);
     const [planets, setPlanets] = useState(null);
+    const [showBirthForm, setShowBirthForm] = useState(!birthData);
+    const [bDate, setBDate] = useState(birthData?.date?.slice(0,10) || "");
+    const [bHour, setBHour] = useState(birthData ? String(birthData.hour).padStart(2,"0") : "12");
+    const [bMin, setBMin] = useState(birthData ? String(birthData.min).padStart(2,"0") : "00");
+    const [chartTab, setChartTab] = useState("resumen");
 
-    function loadHoroscope(signName) {
+    function saveBirth() {
+      if (!bDate) return;
+      const bd = { date: bDate, hour: parseInt(bHour), min: parseInt(bMin) };
+      setBirthData(bd);
+      localStorage.setItem("birth-data", JSON.stringify(bd));
+      const chart = calcBirthChart(new Date(bDate), bd.hour, bd.min);
+      setBirthChart(chart);
+      setShowBirthForm(false);
+    }
+
+    function loadHoroscope(sign) {
       const p = calcPlanets();
       setPlanets(p);
-      const s = SIGNS.find(x => x.name === signName);
-      setHoroscope(interpretPlanets(s.index, p));
+      setHoroscope(interpretPlanets(sign.index, p));
     }
 
-    function selectSign(signName) {
-      setSelectedSign(signName);
-      localStorage.setItem("horoscope-sign", signName);
-      loadHoroscope(signName);
+    function selectSign(sign) {
+      setSelectedSign(sign.name);
+      localStorage.setItem("horoscope-sign", sign.name);
+      localStorage.setItem("horoscope-index", sign.index);
+      loadHoroscope(sign);
     }
 
-    useEffect(() => { if (savedSign && !horoscope) loadHoroscope(savedSign); }, []);
+    useEffect(() => {
+      if (savedSign && !horoscope) {
+        const idx = parseInt(localStorage.getItem("horoscope-index") || "0");
+        loadHoroscope({ name: savedSign, index: idx });
+      }
+    }, []);
 
-    const dateStr = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
-    const signObj = SIGNS.find(s => s.name === selectedSign);
+    const dateStr = new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
+    const signObj = SIGNS.find(s => s.name === selectedSign) || (selectedSign ? { ...SIGNS[parseInt(localStorage.getItem("horoscope-index") || "0")], name: selectedSign } : null);
+
+    // ── Formulario de nacimiento ──
+    if (showBirthForm) return (
+      <div style={{ ...S.horScreen, paddingBottom: 80 }}>
+        <div style={S.horHeader}><span style={S.appName}>{t.horTitle}</span></div>
+        <div style={{ ...S.onboardingCard, marginTop: 16 }}>
+          <div style={{ fontSize: 48, textAlign: "center" }}>🌟</div>
+          <h2 style={{ ...S.onboardingTitle, fontSize: 20, marginBottom: 8 }}>{lang === "en" ? "Your birth chart" : lang === "pt" ? "Sua carta astral" : lang === "it" ? "La tua carta astrale" : "Tu carta astral"}</h2>
+          <p style={{ fontSize: 13, color: "#a89090", textAlign: "center", marginBottom: 20 }}>
+            {lang === "en" ? "Enter your birth date and time to calculate your personal chart." : lang === "pt" ? "Insira a sua data e hora de nascimento para calcular a sua carta." : lang === "it" ? "Inserisci la tua data e ora di nascita per calcolare la tua carta." : "Introduce tu fecha y hora de nacimiento para calcular tu carta personal."}
+          </p>
+          <label style={S.onboardingLabel}>{lang === "en" ? "Date of birth" : lang === "pt" ? "Data de nascimento" : lang === "it" ? "Data di nascita" : "Fecha de nacimiento"}</label>
+          <input type="date" value={bDate} onChange={e => setBDate(e.target.value)} style={{ ...S.onboardingInput, fontSize: 16, marginBottom: 12 }} />
+          <label style={S.onboardingLabel}>{lang === "en" ? "Time of birth (approximate)" : lang === "pt" ? "Hora de nascimento (aproximada)" : lang === "it" ? "Ora di nascita (approssimativa)" : "Hora de nacimiento (aproximada)"}</label>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 20 }}>
+            <select value={bHour} onChange={e => setBHour(e.target.value)} style={{ ...S.onboardingInput, fontSize: 16, flex: 1 }}>
+              {Array.from({length:24},(_,i)=>String(i).padStart(2,"0")).map(h => <option key={h} value={h}>{h}h</option>)}
+            </select>
+            <span style={{ color: "#c4606f", fontWeight: 700 }}>:</span>
+            <select value={bMin} onChange={e => setBMin(e.target.value)} style={{ ...S.onboardingInput, fontSize: 16, flex: 1 }}>
+              {["00","15","30","45"].map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </div>
+          <p style={{ fontSize: 11, color: "#a89090", textAlign: "center", marginBottom: 16 }}>
+            {lang === "en" ? "Don't know your birth time? Use 12:00 for an approximate chart." : lang === "pt" ? "Não sabe a hora? Use 12:00 para uma carta aproximada." : lang === "it" ? "Non conosci l'ora? Usa le 12:00 per una carta approssimativa." : "¿No sabes la hora? Usa las 12:00 para una carta aproximada."}
+          </p>
+          <button onClick={saveBirth} style={S.onboardingBtn} disabled={!bDate}>
+            {lang === "en" ? "Calculate my chart ✨" : lang === "pt" ? "Calcular minha carta ✨" : lang === "it" ? "Calcola la mia carta ✨" : "Calcular mi carta ✨"}
+          </button>
+        </div>
+      </div>
+    );
 
     return (
       <div style={{ ...S.horScreen, paddingBottom: 80 }}>
-        <div style={S.horHeader}><span style={S.appName}>🔮 Horóscopo</span><span style={{ fontSize: 12, color: "#9ca3af" }}>{dateStr}</span></div>
+        <div style={S.horHeader}><span style={S.appName}>{t.horTitle}</span><span style={{ fontSize: 12, color: "#9ca3af" }}>{dateStr}</span></div>
 
+        {/* Carta astral */}
+        {birthChart && (
+          <div style={{ ...S.statCard, marginBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div style={S.statTitle}>🌟 {lang === "en" ? "Your Birth Chart" : lang === "pt" ? "Sua Carta Astral" : lang === "it" ? "La Tua Carta Astrale" : "Tu Carta Astral"}</div>
+              <button onClick={() => setShowBirthForm(true)} style={{ fontSize: 11, color: "#c4606f", background: "none", border: "none", cursor: "pointer" }}>{t.horChange}</button>
+            </div>
+            <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+              {[{id:"resumen", label:"✨ " + (lang==="en"?"Summary":lang==="pt"?"Resumo":lang==="it"?"Riassunto":"Resumen")},
+                {id:"planetas", label:"🪐 " + (lang==="en"?"Planets":lang==="pt"?"Planetas":lang==="it"?"Pianeti":"Planetas")},
+                {id:"casas", label:"🏠 " + (lang==="en"?"Houses":lang==="pt"?"Casas":lang==="it"?"Case":"Casas")}
+              ].map(tab => (
+                <button key={tab.id} onClick={() => setChartTab(tab.id)}
+                  style={{ ...S.chip, background: chartTab === tab.id ? "#c4606f" : "#f9f0f1", color: chartTab === tab.id ? "#fff" : "#3d2c2c", fontSize: 12 }}>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {chartTab === "resumen" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <div style={{ flex: 1, minWidth: 100, background: "#fdf0f2", borderRadius: 12, padding: "10px 12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 10, color: "#a89090", marginBottom: 2 }}>☀️ {lang==="en"?"Sun":lang==="pt"?"Sol":lang==="it"?"Sole":"Solar"}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#c4606f" }}>{SIGN_EMOJIS[birthChart.sol.idx]} {ZODIAC_NAMES[birthChart.sol.idx]}</div>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 100, background: "#f0f0f8", borderRadius: 12, padding: "10px 12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 10, color: "#a89090", marginBottom: 2 }}>🌙 {lang==="en"?"Moon":lang==="pt"?"Lua":lang==="it"?"Luna":"Lunar"}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#6060a0" }}>{SIGN_EMOJIS[birthChart.luna.idx]} {ZODIAC_NAMES[birthChart.luna.idx]}</div>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 100, background: "#f0f8f0", borderRadius: 12, padding: "10px 12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 10, color: "#a89090", marginBottom: 2 }}>⬆️ {lang==="en"?"Rising":lang==="pt"?"Ascendente":lang==="it"?"Ascendente":"Ascendente"}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#407040" }}>{SIGN_EMOJIS[birthChart.asc.idx]} {ZODIAC_NAMES[birthChart.asc.idx]}</div>
+                  </div>
+                </div>
+                <div style={{ background: "#fdf8f6", borderRadius: 12, padding: "12px 14px", fontSize: 12, color: "#3d2c2c", lineHeight: 1.7 }}>
+                  <div style={{ fontWeight: 700, color: "#c4606f", marginBottom: 4 }}>☀️ {lang==="en"?"Your solar personality":lang==="pt"?"Sua personalidade solar":lang==="it"?"La tua personalità solare":"Tu personalidad solar"}</div>
+                  {SIGN_PERSONALITY[birthChart.sol.idx]}
+                </div>
+                <div style={{ background: "#f8f8fd", borderRadius: 12, padding: "12px 14px", fontSize: 12, color: "#3d2c2c", lineHeight: 1.7 }}>
+                  <div style={{ fontWeight: 700, color: "#6060a0", marginBottom: 4 }}>🌙 {lang==="en"?"Your lunar emotions":lang==="pt"?"Suas emoções lunares":lang==="it"?"Le tue emozioni lunari":"Tus emociones lunares"}</div>
+                  {lang==="en" ? `Your Moon in ${ZODIAC_NAMES[birthChart.luna.idx]} shapes how you feel and process emotions.` : lang==="pt" ? `Sua Lua em ${ZODIAC_NAMES[birthChart.luna.idx]} molda como você sente e processa as emoções.` : lang==="it" ? `La tua Luna in ${ZODIAC_NAMES[birthChart.luna.idx]} plasma come senti ed elabori le emozioni.` : `Tu Luna en ${ZODIAC_NAMES[birthChart.luna.idx]} determina cómo sientes y procesas las emociones.`} {SIGN_PERSONALITY[birthChart.luna.idx]}
+                </div>
+                <div style={{ background: "#f0f8f0", borderRadius: 12, padding: "12px 14px", fontSize: 12, color: "#3d2c2c", lineHeight: 1.7 }}>
+                  <div style={{ fontWeight: 700, color: "#407040", marginBottom: 4 }}>⬆️ {lang==="en"?"How others see you":lang==="pt"?"Como os outros te veem":lang==="it"?"Come gli altri ti vedono":"Cómo te ven los demás"}</div>
+                  {ASC_MEANINGS[birthChart.asc.idx]}
+                </div>
+              </div>
+            )}
+
+            {chartTab === "planetas" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { emoji: "☀️", label: lang==="en"?"Sun":lang==="pt"?"Sol":lang==="it"?"Sole":"Sol", data: birthChart.sol },
+                  { emoji: "🌙", label: lang==="en"?"Moon":lang==="pt"?"Lua":lang==="it"?"Luna":"Luna", data: birthChart.luna },
+                  { emoji: "⬆️", label: lang==="en"?"Rising":lang==="pt"?"Ascendente":lang==="it"?"Ascendente":"Ascendente", data: birthChart.asc },
+                  { emoji: "♀", label: lang==="en"?"Venus":lang==="pt"?"Vênus":lang==="it"?"Venere":"Venus", data: birthChart.venus },
+                  { emoji: "♂", label: lang==="en"?"Mars":lang==="pt"?"Marte":lang==="it"?"Marte":"Marte", data: birthChart.marte },
+                  { emoji: "☿", label: lang==="en"?"Mercury":lang==="pt"?"Mercúrio":lang==="it"?"Mercurio":"Mercurio", data: birthChart.mercurio },
+                  { emoji: "♃", label: lang==="en"?"Jupiter":lang==="pt"?"Júpiter":lang==="it"?"Giove":"Júpiter", data: birthChart.jupiter },
+                  { emoji: "♄", label: lang==="en"?"Saturn":lang==="pt"?"Saturno":lang==="it"?"Saturno":"Saturno", data: birthChart.saturno },
+                ].map(({ emoji, label, data }) => (
+                  <div key={label} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "#fdf8f6", borderRadius: 10 }}>
+                    <span style={{ fontSize: 14, minWidth: 20 }}>{emoji}</span>
+                    <span style={{ fontSize: 12, color: "#a89090", minWidth: 80 }}>{label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "#c4606f" }}>{SIGN_EMOJIS[data.idx]} {ZODIAC_NAMES[data.idx]}</span>
+                    {data.casa && <span style={{ fontSize: 11, color: "#9ca3af", marginLeft: "auto" }}>Casa {data.casa}</span>}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {chartTab === "casas" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {[
+                  { planet: "☀️", name: birthChart.sol.casa, meaning: HOUSE_MEANINGS[birthChart.sol.casa-1], label: lang==="en"?"Sun":lang==="pt"?"Sol":lang==="it"?"Sole":"Sol" },
+                  { planet: "🌙", name: birthChart.luna.casa, meaning: HOUSE_MEANINGS[birthChart.luna.casa-1], label: lang==="en"?"Moon":lang==="pt"?"Lua":lang==="it"?"Luna":"Luna" },
+                  { planet: "♀", name: birthChart.venus.casa, meaning: HOUSE_MEANINGS[birthChart.venus.casa-1], label: "Venus" },
+                  { planet: "♂", name: birthChart.marte.casa, meaning: HOUSE_MEANINGS[birthChart.marte.casa-1], label: lang==="en"?"Mars":lang==="pt"?"Marte":lang==="it"?"Marte":"Marte" },
+                  { planet: "☿", name: birthChart.mercurio.casa, meaning: HOUSE_MEANINGS[birthChart.mercurio.casa-1], label: lang==="en"?"Mercury":lang==="pt"?"Mercúrio":lang==="it"?"Mercurio":"Mercurio" },
+                ].map(({ planet, name, meaning, label }) => (
+                  <div key={label} style={{ padding: "8px 12px", background: "#fdf8f6", borderRadius: 10, fontSize: 12 }}>
+                    <span style={{ fontWeight: 700, color: "#c4606f" }}>{planet} {label} </span>
+                    <span style={{ color: "#a89090" }}>{lang==="en"?"House":lang==="pt"?"Casa":lang==="it"?"Casa":"Casa"} {name} — {meaning}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Signo diario */}
         {!selectedSign ? (
           <div>
             <p style={{ fontSize: 13, color: "#6b7280", textAlign: "center", marginBottom: 16 }}>{t.chooseSign}</p>
             <div style={S.signGrid}>
               {SIGNS.map(s => (
-                <div key={s.name} onClick={() => selectSign(s.name)} style={S.signChip}>
+                <div key={s.name} onClick={() => selectSign(s)} style={S.signChip}>
                   <div style={{ fontSize: 22 }}>{s.emoji}</div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#374151" }}>{s.name}</div>
                   <div style={{ fontSize: 9, color: "#9ca3af" }}>{s.dates}</div>
@@ -837,10 +1146,9 @@ export default function App() {
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={S.signHeader}>
               <div style={{ fontSize: 48 }}>{signObj?.emoji}</div>
-              <div><div style={{ fontSize: 20, fontWeight: 700, color: "#c4606f" }}>{selectedSign}</div><div style={{ fontSize: 12, color: "#a89090" }}>{signObj?.dates}</div></div>
-              <button onClick={() => { setSelectedSign(null); setHoroscope(null); setPlanets(null); localStorage.removeItem("horoscope-sign"); }} style={S.changeSignBtn}>Cambiar</button>
+              <div><div style={{ fontSize: 20, fontWeight: 700, color: "#c4606f" }}>{signObj?.name}</div><div style={{ fontSize: 12, color: "#a89090" }}>{signObj?.dates}</div></div>
+              <button onClick={() => { setSelectedSign(null); setHoroscope(null); setPlanets(null); localStorage.removeItem("horoscope-sign"); }} style={S.changeSignBtn}>{t.horChange}</button>
             </div>
-
             {planets && (
               <div style={S.planetCard}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: "#c4606f", marginBottom: 10 }}>{t.planetsToday}</div>
@@ -851,16 +1159,15 @@ export default function App() {
                 </div>
               </div>
             )}
-
             {horoscope && (
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {[{ key: "general", label: "✨ General", color: "#c4606f" }, { key: "amor", label: "💖 Amor", color: "#d4788a" }, { key: "salud", label: "🌿 Salud", color: "#7a9e7e" }, { key: "trabajo", label: "💼 Trabajo", color: "#b07050" }, { key: "consejo", label: "🌙 Consejo del día", color: "#8a6070" }].map(({ key, label, color }) => (
+                {Object.entries(t.horSections).map(([key, label]) => (
                   <div key={key} style={S.horCard}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color, marginBottom: 6 }}>{label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: { general: "#c4606f", amor: "#d4788a", salud: "#7a9e7e", trabajo: "#b07050", consejo: "#8a6070" }[key], marginBottom: 6 }}>{label}</div>
                     <div style={{ fontSize: 13, color: "#374151", lineHeight: 1.6 }}>{horoscope[key]}</div>
                   </div>
                 ))}
-                <div style={{ fontSize: 10, color: "#9ca3af", textAlign: "center", fontStyle: "italic" }}>Basado en posiciones astronómicas reales calculadas para hoy</div>
+                <div style={{ fontSize: 10, color: "#9ca3af", textAlign: "center", fontStyle: "italic" }}>{t.horFooter}</div>
               </div>
             )}
           </div>
@@ -1091,7 +1398,7 @@ export default function App() {
           )}
           {notifPermission === "granted" && nextPeriodStart && (
             <div style={{ fontSize: 12, color: "#a89090", marginTop: 8 }}>
-              📅 {t.notifNext} {addDays(nextPeriodStart, -1).toLocaleDateString(locale, { day: "numeric", month: "long" })}
+      📅 {t.notifNext} {addDays(nextPeriodStart, -1).toLocaleDateString(locale, { day: "numeric", month: "long" })}
             </div>
           )}
         </div>
