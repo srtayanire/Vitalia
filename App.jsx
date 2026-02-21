@@ -13,11 +13,9 @@ const TRANSLATIONS = {
     appName: "Vitalia", welcome: "Bienvenida a Vitalia",
     cycleQuestion: "¿Cuántos días dura tu ciclo?", cycleHint: "Lo más común es entre 25 y 35 días.", cyclePlaceholder: "ej: 28",
     continueBtn: "Continuar →", dontKnow: "No lo sé, usar 28 días", cancel: "Cancelar",
-    cycleError: "Introduce un número entre 21 y 45 días",
     daysUntilPeriod: "Días hasta tu período", periodDelay: "Días de retraso", periodActive: "Día de regla",
     registerPeriod: "Registra tu primer período", nextPeriod: "Próximo período:",
     ovulationDay: "Día de ovulación", fertilDay: "fértil",
-    realCycle: "Ciclo real", configCycle: "Ciclo", change: "Cambiar",
     startPeriod: "🩸 Inicio del período", endPeriod: "✓ Fin del período",
     home: "Inicio", calendar: "Calendario", stats: "Estadísticas", horoscope: "Horóscopo", settings: "Ajustes",
     calTitle: "📅 Calendario", calInstruction: "Toca un día para ver síntomas o marcar período",
@@ -108,11 +106,9 @@ const TRANSLATIONS = {
     appName: "Vitalia", welcome: "Welcome to Vitalia",
     cycleQuestion: "How many days does your cycle last?", cycleHint: "Most common is between 25 and 35 days.", cyclePlaceholder: "e.g. 28",
     continueBtn: "Continue →", dontKnow: "I don't know, use 28 days", cancel: "Cancel",
-    cycleError: "Please enter a number between 21 and 45 days",
     daysUntilPeriod: "Days until period", periodDelay: "Days late", periodActive: "Period day",
     registerPeriod: "Register your first period", nextPeriod: "Next period:",
     ovulationDay: "Ovulation day", fertilDay: "fertile",
-    realCycle: "Real cycle", configCycle: "Cycle", change: "Change",
     startPeriod: "🩸 Start period", endPeriod: "✓ End period",
     home: "Home", calendar: "Calendar", stats: "Statistics", horoscope: "Horoscope", settings: "Settings",
     calTitle: "📅 Calendar", calInstruction: "Tap a day to log symptoms or mark period",
@@ -204,11 +200,9 @@ const TRANSLATIONS = {
     appName: "Vitalia", welcome: "Bem-vinda ao Vitalia",
     cycleQuestion: "Quantos dias dura o seu ciclo?", cycleHint: "O mais comum é entre 25 e 35 dias.", cyclePlaceholder: "ex: 28",
     continueBtn: "Continuar →", dontKnow: "Não sei, usar 28 dias", cancel: "Cancelar",
-    cycleError: "Insira um número entre 21 e 45 dias",
     daysUntilPeriod: "Dias até a menstruação", periodDelay: "Dias de atraso", periodActive: "Dia de menstruação",
     registerPeriod: "Registe a sua primeira menstruação", nextPeriod: "Próxima menstruação:",
     ovulationDay: "Dia de ovulação", fertilDay: "fértil",
-    realCycle: "Ciclo real", configCycle: "Ciclo", change: "Alterar",
     startPeriod: "🩸 Início da menstruação", endPeriod: "✓ Fim da menstruação",
     home: "Início", calendar: "Calendário", stats: "Estatísticas", horoscope: "Horóscopo", settings: "Ajustes",
     calTitle: "📅 Calendário", calInstruction: "Toque num dia para ver sintomas ou marcar menstruação",
@@ -299,11 +293,9 @@ const TRANSLATIONS = {
     appName: "Vitalia", welcome: "Benvenuta in Vitalia",
     cycleQuestion: "Quanti giorni dura il tuo ciclo?", cycleHint: "Il più comune è tra 25 e 35 giorni.", cyclePlaceholder: "es: 28",
     continueBtn: "Continua →", dontKnow: "Non lo so, usa 28 giorni", cancel: "Annulla",
-    cycleError: "Inserisci un numero tra 21 e 45 giorni",
     daysUntilPeriod: "Giorni al ciclo", periodDelay: "Giorni di ritardo", periodActive: "Giorno del ciclo",
     registerPeriod: "Registra il tuo primo ciclo", nextPeriod: "Prossimo ciclo:",
     ovulationDay: "Giorno di ovulazione", fertilDay: "fertile",
-    realCycle: "Ciclo reale", configCycle: "Ciclo", change: "Cambia",
     startPeriod: "🩸 Inizio ciclo", endPeriod: "✓ Fine ciclo",
     home: "Inizio", calendar: "Calendario", stats: "Statistiche", horoscope: "Oroscopo", settings: "Impostazioni",
     calTitle: "📅 Calendario", calInstruction: "Tocca un giorno per vedere sintomi o segnare il ciclo",
@@ -717,10 +709,6 @@ export default function App() {
   const [lang, setLang] = useState(() => localStorage.getItem("lang") || "es");
   const t = TRANSLATIONS[lang] || TRANSLATIONS.es;
   useEffect(() => { localStorage.setItem("lang", lang); }, [lang]);
-  const [userCycleLength, setUserCycleLength] = useState(() => { const s = localStorage.getItem("cycle-length"); return s ? parseInt(s) : null; });
-  const [cycleInput, setCycleInput] = useState("");
-  const [cycleError, setCycleError] = useState("");
-  const [editingCycle, setEditingCycle] = useState(false);
   const [entries, setEntries] = useState(() => {
     try { const raw = localStorage.getItem("period-entries"); if (!raw) return []; return JSON.parse(raw).map(e => ({ ...e, start: new Date(e.start), end: e.end ? new Date(e.end) : null })); } catch { return []; }
   });
@@ -736,7 +724,6 @@ export default function App() {
   });
 
   useEffect(() => { localStorage.setItem("period-entries", JSON.stringify(entries)); }, [entries]);
-  useEffect(() => { if (userCycleLength) localStorage.setItem("cycle-length", userCycleLength); }, [userCycleLength]);
   useEffect(() => { localStorage.setItem("pill-reminder", JSON.stringify(pillReminder)); }, [pillReminder]);
   useEffect(() => { localStorage.setItem("symptoms", JSON.stringify(symptoms)); }, [symptoms]);
   useEffect(() => { registerSW(); }, []);
@@ -766,7 +753,7 @@ export default function App() {
   }
 
   const realCycle = calcRealCycle(entries);
-  const cycleLength = realCycle ?? (userCycleLength && userCycleLength >= 21 && userCycleLength <= 45 ? userCycleLength : 28);
+  const cycleLength = realCycle ?? 28;
   const today = startOfDay(new Date());
   const activePeriod = entries.find(e => !e.end) ?? null;
   const { nextPeriodStart, ovulationDays } = computePredictions(entries, cycleLength);
@@ -778,11 +765,6 @@ export default function App() {
   }, [notifPermission, nextPeriodStart]);
 
   function showToast(msg) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-  function handleCycleSubmit() {
-    const val = parseInt(cycleInput);
-    if (!cycleInput || isNaN(val) || val < 21 || val > 45) { setCycleError("Introduce un número entre 21 y 45 días"); return; }
-    setUserCycleLength(val); setCycleError(""); setEditingCycle(false);
-  }
   function handleDayClick(date) {
     if (!pendingStart) {
       // Abrir panel de síntomas para ese día
@@ -812,60 +794,6 @@ export default function App() {
 
 
   // ─── Onboarding ──────────────────────────────────────────────────────────────
-  function OnboardingScreen() {
-    const [step, setStep] = useState(() => localStorage.getItem("onboarding-lang-done") ? "cycle" : "lang");
-
-    function pressNum(n) {
-      setCycleInput(prev => { const next = prev + n; if (parseInt(next) > 45) return prev; return next; });
-      setCycleError("");
-    }
-    function pressDelete() { setCycleInput(prev => prev.slice(0, -1)); }
-
-    if (step === "lang") return (
-      <div style={S.onboarding}>
-        <div style={{ fontSize: 64, textAlign: "center" }}>🌸</div>
-        <h1 style={S.onboardingTitle}>Vitalia</h1>
-        <p style={{ ...S.onboardingText, marginBottom: 28 }}>Choose your language · Elige tu idioma</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%", maxWidth: 300 }}>
-          {[{code:"es", flag:"🇪🇸", name:"Español"}, {code:"en", flag:"🇬🇧", name:"English"}, {code:"pt", flag:"🇧🇷", name:"Português"}, {code:"it", flag:"🇮🇹", name:"Italiano"}].map(l => (
-            <button key={l.code} onClick={() => { setLang(l.code); localStorage.setItem("lang", l.code); localStorage.setItem("onboarding-lang-done", "1"); setStep("cycle"); }}
-              style={{ ...S.onboardingBtn, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, fontSize: 17, padding: "14px 20px",
-                background: lang === l.code ? "#c4606f" : "#fdf0f2", color: lang === l.code ? "#fff" : "#3d2c2c" }}>
-              <span style={{ fontSize: 24 }}>{l.flag}</span> {l.name}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-
-    return (
-      <div style={S.onboarding}>
-        <div style={{ fontSize: 64, textAlign: "center" }}>🌸</div>
-        <h1 style={S.onboardingTitle}>{t.welcome}</h1>
-        <p style={S.onboardingText}>{t.cycleQuestion}</p>
-        <p style={S.onboardingHint}>{t.cycleHint}</p>
-        <div style={S.onboardingCard}>
-          <label style={S.onboardingLabel}>{t.cycleQuestion}</label>
-          <div style={{ fontSize: 52, fontWeight: 200, color: cycleInput ? "#c4606f" : "#d8c0c4", textAlign: "center", letterSpacing: -2, minHeight: 64, lineHeight: "64px" }}>
-            {cycleInput || "—"}
-          </div>
-          {cycleError && <p style={{ color: "#ef4444", fontSize: 12, textAlign: "center" }}>{t.cycleError}</p>}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, margin: "12px 0" }}>
-            {["1","2","3","4","5","6","7","8","9","","0","⌫"].map((n, i) => (
-              <button key={i} onClick={() => n === "⌫" ? pressDelete() : n ? pressNum(n) : null}
-                style={{ ...S.numBtn, opacity: n === "" ? 0 : 1, pointerEvents: n === "" ? "none" : "auto",
-                  background: n === "⌫" ? "#f9d8e0" : "#fdf0f2", color: n === "⌫" ? "#c4606f" : "#3d2c2c" }}>
-                {n}
-              </button>
-            ))}
-          </div>
-          <button onClick={handleCycleSubmit} style={S.onboardingBtn}>{t.continueBtn}</button>
-          <button onClick={() => { setUserCycleLength(28); setEditingCycle(false); }} style={S.onboardingSkip}>{t.dontKnow}</button>
-          {editingCycle && <button onClick={() => setEditingCycle(false)} style={S.onboardingSkip}>{t.cancel}</button>}
-        </div>
-      </div>
-    );
-  }
 
   // ─── Hormonas ─────────────────────────────────────────────────────────────────
   function HormoneSection() {
@@ -1386,7 +1314,7 @@ export default function App() {
 
   return (
     <div style={S.root}>
-      {(!userCycleLength && !realCycle) || editingCycle ? <OnboardingScreen /> : (
+      {(
         <>
           <div style={{ paddingBottom: 64 }}>
             {screen === "home" && <HomeScreen />}
