@@ -777,208 +777,130 @@ const ASC_MEANINGS = [
 ];
 
 // ─── Ruleta de ciclo ──────────────────────────────────────────────────────────
-function CycleWheel({ entries, cycleLength, today, t, lang, activePeriod, phaseInfo }) {
-  const SIZE = 260, CX = 130, CY = 130, R = 108, TRACK = 22;
+function CycleWheel({ entries, cycleLength, today, t, lang, activePeriod }) {
+  const SIZE = 260, CX = 130, CY = 130, R = 100, TRACK = 20;
 
-  const currentDay = phaseInfo ? phaseInfo.dayOfCycle : 1;
-  const ovulationDay = Math.max(1, cycleLength - 14);
-  const fertileStart = Math.max(1, ovulationDay - 2);
-  const fertileEnd = Math.min(cycleLength, ovulationDay + 1);
+  // Calcular día actual del ciclo
+  const currentDay = (() => {
+    if (!entries.length) return null;
+    const sorted = [...entries].sort((a, b) => new Date(a.start) - new Date(b.start));
+    const raw = new Date(sorted[sorted.length - 1].start);
+    const lastMidnight = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const diffDays = Math.round((todayMidnight - lastMidnight) / 86400000); // 0 = mismo día = día 1
+    return (diffDays % cycleLength) + 1;
+  })();
 
   const lastStart = entries.length > 0
-    ? new Date([...entries].sort((a, b) => new Date(a.start) - new Date(b.start)).at(-1).start)
+    ? (() => {
+        const sorted = [...entries].sort((a,b) => new Date(a.start)-new Date(b.start));
+        const raw = new Date(sorted[sorted.length-1].start);
+        return new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+      })()
     : null;
 
-  // Estado de la bolita arrastrable
-  const [dragDay, setDragDay] = useState(null); // null = en posición real
-  const [isDragging, setIsDragging] = useState(false);
-  const ref = useRef(null);
-  const snapRef = useRef(null);
-
-  // El día que se muestra (real o arrastrado)
-  const displayDay = dragDay !== null ? dragDay : currentDay;
+  const ovDay = Math.max(1, cycleLength - 14);
+  const fertStart = Math.max(1, ovDay - 2);
+  const fertEnd = Math.min(cycleLength, ovDay + 1);
 
   function dayToAngle(day) {
-    // Día 1 arriba (270° en coordenadas estándar = -90°)
+    // Día 1 = arriba (−90°), avanza en sentido horario
     return ((day - 1) / cycleLength) * 360 - 90;
   }
-
-  function polarToXY(angleDeg, r) {
-    const rad = angleDeg * Math.PI / 180;
+  function polarToXY(deg, r) {
+    const rad = deg * Math.PI / 180;
     return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
   }
-
-  function angleToDayFromPos(clientX, clientY) {
-    const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const angle = Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
-    // Convertir ángulo a día (día 1 = -90°)
-    const normalized = ((angle + 90) + 360) % 360;
-    const day = Math.round((normalized / 360) * cycleLength);
-    return day === 0 ? cycleLength : day;
-  }
-
-  function onPointerDown(e) {
-    e.preventDefault();
-    if (snapRef.current) clearTimeout(snapRef.current);
-    setIsDragging(true);
-    const cx = e.touches ? e.touches[0].clientX : e.clientX;
-    const cy = e.touches ? e.touches[0].clientY : e.clientY;
-    setDragDay(angleToDayFromPos(cx, cy));
-  }
-
-  function onPointerMove(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-    const cx = e.touches ? e.touches[0].clientX : e.clientX;
-    const cy = e.touches ? e.touches[0].clientY : e.clientY;
-    setDragDay(angleToDayFromPos(cx, cy));
-  }
-
-  function onPointerUp() {
-    setIsDragging(false);
-    // Efecto "teléfono antiguo": rebota de vuelta al día real
-    snapRef.current = setTimeout(() => setDragDay(null), 600);
-  }
-
-  // Arco SVG entre dos ángulos
-  function arcSegment(dayS, dayE, r, thickness, color, key) {
-    const aS = dayToAngle(dayS), aE = dayToAngle(dayE + 1);
-    const or = r, ir = r - thickness;
-    const s = polarToXY(aS, or), e = polarToXY(aE, or);
-    const si = polarToXY(aS, ir), ei = polarToXY(aE, ir);
-    const span = ((aE - aS) + 360) % 360;
+  function arc(d1, d2, r, thick, color, key) {
+    const a1 = dayToAngle(d1), a2 = dayToAngle(d2 + 1);
+    const R1 = r, R2 = r - thick;
+    const p1 = polarToXY(a1, R1), p2 = polarToXY(a2, R1);
+    const p3 = polarToXY(a2, R2), p4 = polarToXY(a1, R2);
+    const span = ((a2 - a1) + 360) % 360;
     const lg = span > 180 ? 1 : 0;
-    return (
-      <path key={key}
-        d={`M${s.x} ${s.y} A${or} ${or} 0 ${lg} 1 ${e.x} ${e.y} L${ei.x} ${ei.y} A${ir} ${ir} 0 ${lg} 0 ${si.x} ${si.y}Z`}
-        fill={color} />
-    );
+    return <path key={key} d={`M${p1.x} ${p1.y} A${R1} ${R1} 0 ${lg} 1 ${p2.x} ${p2.y} L${p3.x} ${p3.y} A${R2} ${R2} 0 ${lg} 0 ${p4.x} ${p4.y}Z`} fill={color} />;
   }
 
-  // Posición actual de la bolita
-  const dotAngle = dayToAngle(displayDay);
-  const dotPos = polarToXY(dotAngle, R);
+  // Posición de la bolita
+  const dotPos = currentDay ? polarToXY(dayToAngle(currentDay), R) : null;
 
-  // Info del día mostrado
-  const isDisplayMens = displayDay <= 5;
-  const isDisplayOv = displayDay === ovulationDay;
-  const isDisplayFert = displayDay >= fertileStart && displayDay <= fertileEnd && !isDisplayOv;
+  // Colores según fase del día actual
+  const isMens = currentDay && currentDay <= 5;
+  const isOv = currentDay === ovDay;
+  const isFert = currentDay >= fertStart && currentDay <= fertEnd && !isOv;
+  const dotColor = isMens ? "#c4606f" : isOv ? "#b85068" : isFert ? "#d4788a" : "#b07050";
 
-  const displayColor = isDisplayMens ? "#c4606f" : isDisplayOv ? "#b85068" : isDisplayFert ? "#d4788a" : "#b07050";
-  const displayLabel = isDisplayOv
-    ? (lang==="en"?"Ovulation 🌸":lang==="pt"?"Ovulação 🌸":lang==="it"?"Ovulazione 🌸":"Ovulación 🌸")
-    : isDisplayFert
-    ? (lang==="en"?"Fertile days":lang==="pt"?"Dias férteis":lang==="it"?"Giorni fertili":"Días fértiles")
-    : isDisplayMens
-    ? (lang==="en"?"Period":lang==="pt"?"Menstruação":lang==="it"?"Mestruazione":"Regla")
-    : (lang==="en"?"Luteal phase":lang==="pt"?"Fase lútea":lang==="it"?"Fase luteale":"Fase lútea");
-
-  // Fecha del día mostrado
-  const displayDate = lastStart ? (() => {
-    const d = new Date(lastStart);
-    d.setDate(d.getDate() + displayDay - 1);
-    return d.toLocaleDateString(lang==="en"?"en":lang==="pt"?"pt":lang==="it"?"it":"es", { day: "numeric", month: "short" });
-  })() : null;
-
-  // Info del centro (días de regla o días hasta regla)
-  const centerNumber = activePeriod
-    ? (phaseInfo?.dayOfCycle ?? "—")
-    : (() => {
-        if (!lastStart) return "—";
-        const next = new Date(lastStart);
-        next.setDate(next.getDate() + cycleLength);
-        return Math.abs(Math.ceil((next - today) / 86400000));
-      })();
+  // Centro: días de regla activa o días hasta próxima regla
+  const centerNum = activePeriod
+    ? currentDay
+    : currentDay !== null
+      ? cycleLength - currentDay + 1  // días restantes incluyendo hoy
+      : null;
 
   const centerLabel = activePeriod
-    ? (lang==="en"?"Day of period":lang==="pt"?"Dia da regra":lang==="it"?"Giorno ciclo":"Día de regla")
-    : (() => {
-        if (!lastStart) return lang==="en"?"Register your period":"Registra tu período";
-        const next = new Date(lastStart);
-        next.setDate(next.getDate() + cycleLength);
-        const diff = Math.ceil((next - today) / 86400000);
-        return diff >= 0
-          ? (lang==="en"?"days until period":lang==="pt"?"dias até a regra":lang==="it"?"giorni al ciclo":"días hasta la regla")
-          : (lang==="en"?"days late":lang==="pt"?"dias de atraso":lang==="it"?"giorni ritardo":"días de retraso");
-      })();
+    ? (lang==="en"?"day of period":lang==="pt"?"dia da regra":lang==="it"?"giorno ciclo":"día de regla")
+    : centerNum !== null
+      ? (centerNum >= 0
+          ? (lang==="en"?"days until period":lang==="pt"?"dias até regra":lang==="it"?"giorni al ciclo":"días para la regla")
+          : (lang==="en"?"days late":lang==="pt"?"dias atraso":lang==="it"?"giorni ritardo":"días de retraso"))
+      : "";
 
-  const todayStr = today.toLocaleDateString(lang==="en"?"en":lang==="pt"?"pt":lang==="it"?"it":"es", { day: "numeric", month: "short" });
-  const phaseColor = (phaseInfo?.phaseKey === "menstruacion") ? "#c4606f" : (phaseInfo?.phaseKey === "ovulacion") ? "#d4788a" : (phaseInfo?.phaseKey === "folicular") ? "#e8a0aa" : "#b07050";
+  const centerColor = activePeriod ? "#c4606f" : (centerNum !== null && centerNum < 0) ? "#c4606f" : "#c4606f";
+  const todayStr = today.toLocaleDateString(lang==="en"?"en-GB":lang==="pt"?"pt-BR":lang==="it"?"it-IT":"es-ES", { day:"numeric", month:"short" });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-      <div style={{ position: "relative", width: SIZE, height: SIZE, touchAction: "none", cursor: isDragging ? "grabbing" : "grab" }}
-        ref={ref}
-        onMouseDown={onPointerDown} onMouseMove={onPointerMove} onMouseUp={onPointerUp} onMouseLeave={onPointerUp}
-        onTouchStart={onPointerDown} onTouchMove={onPointerMove} onTouchEnd={onPointerUp}>
-
+    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+      <div style={{ position:"relative", width:SIZE, height:SIZE }}>
         <svg width={SIZE} height={SIZE}>
-          {/* Track base */}
-          <circle cx={CX} cy={CY} r={R} fill="none" stroke="#f5e8ea" strokeWidth={TRACK} />
+          {/* Track fondo */}
+          <circle cx={CX} cy={CY} r={R} fill="none" stroke="#f5eaec" strokeWidth={TRACK}/>
 
-          {/* Arcos por fase */}
-          {arcSegment(1, 5, R, TRACK, "#f5b8c4", "mens")}
-          {fertileStart > 6 && arcSegment(6, fertileStart - 1, R, TRACK, "#fceef0", "fol")}
-          {arcSegment(fertileStart, fertileEnd, R, TRACK, "#f9c8d8", "fert")}
-          {arcSegment(ovulationDay, ovulationDay, R, TRACK, "#e8849a", "ov")}
-          {fertileEnd < cycleLength && arcSegment(fertileEnd + 1, cycleLength, R, TRACK, "#f5e6d8", "lut")}
+          {/* Arcos de fase */}
+          {arc(1, 5, R, TRACK, "#f5b8c4", "m")}
+          {fertStart > 6 && arc(6, fertStart-1, R, TRACK, "#fce8f0", "f")}
+          {arc(fertStart, fertEnd, R, TRACK, "#f9c8d8", "fe")}
+          {arc(ovDay, ovDay, R, TRACK, "#e8849a", "o")}
+          {fertEnd < cycleLength && arc(fertEnd+1, cycleLength, R, TRACK, "#f5e6d8", "l")}
 
-          {/* Marcas de días */}
-          {Array.from({ length: cycleLength }, (_, i) => i + 1)
-            .filter(d => d % 7 === 0 || d === 1 || d === ovulationDay)
-            .map(day => {
-              const p = polarToXY(dayToAngle(day), R - TRACK / 2 - 14);
-              return <text key={day} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle"
-                fontSize="9" fill="#a08090" fontWeight="700">{day}</text>;
-            })}
+          {/* Números 1, 7, 14, 21 */}
+          {[1, 7, 14, 21].filter(d => d <= cycleLength).map(d => {
+            const p = polarToXY(dayToAngle(d), R + 14);
+            return <text key={d} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="10" fill="#a08090" fontWeight="700">{d}</text>;
+          })}
 
-          {/* Emojis */}
-          {(() => { const p = polarToXY(dayToAngle(1), R + 4); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="11">🩸</text>; })()}
-          {(() => { const p = polarToXY(dayToAngle(ovulationDay), R + 4); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="12">🌸</text>; })()}
+          {/* Emoji regla */}
+          {(() => { const p = polarToXY(dayToAngle(1), R - TRACK/2); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="12">🩸</text>; })()}
+          {/* Emoji ovulación */}
+          {(() => { const p = polarToXY(dayToAngle(ovDay), R - TRACK/2); return <text x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="12">🌸</text>; })()}
 
           {/* Centro blanco */}
-          <circle cx={CX} cy={CY} r={R - TRACK - 6} fill="white" />
+          <circle cx={CX} cy={CY} r={R - TRACK - 4} fill="white"/>
 
-          {/* Bolita arrastrable */}
-          <circle cx={dotPos.x} cy={dotPos.y} r={15} fill={isDragging ? displayColor : phaseColor} opacity={0.2}
-            style={{ transition: isDragging ? "none" : "cx 0.6s cubic-bezier(0.34,1.56,0.64,1), cy 0.6s cubic-bezier(0.34,1.56,0.64,1)" }} />
-          <circle cx={dotPos.x} cy={dotPos.y} r={10} fill={isDragging ? displayColor : phaseColor}
-            style={{ transition: isDragging ? "none" : "cx 0.6s cubic-bezier(0.34,1.56,0.64,1), cy 0.6s cubic-bezier(0.34,1.56,0.64,1)" }} />
-          <text x={dotPos.x} y={dotPos.y} textAnchor="middle" dominantBaseline="middle"
-            fontSize="8" fill="white" fontWeight="800"
-            style={{ transition: isDragging ? "none" : "x 0.6s cubic-bezier(0.34,1.56,0.64,1), y 0.6s cubic-bezier(0.34,1.56,0.64,1)" }}>
-            {displayDay}
-          </text>
+          {/* Bolita del día actual */}
+          {dotPos && (<>
+            <circle cx={dotPos.x} cy={dotPos.y} r={16} fill={dotColor} opacity={0.2}/>
+            <circle cx={dotPos.x} cy={dotPos.y} r={11} fill={dotColor}/>
+            <text x={dotPos.x} y={dotPos.y} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="white" fontWeight="800">{currentDay}</text>
+          </>)}
         </svg>
 
-        {/* Texto central fijo */}
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", textAlign: "center", pointerEvents: "none", width: (R - TRACK - 6) * 2 - 16 }}>
-          {lastStart || activePeriod ? (
-            <>
-              <div style={{ fontSize: 34, fontWeight: 800, color: phaseColor, lineHeight: 1 }}>{centerNumber}</div>
-              <div style={{ fontSize: 10, color: "#a89090", fontWeight: 600, marginTop: 3, lineHeight: 1.3 }}>{centerLabel}</div>
-              <div style={{ fontSize: 9, color: "#c8b8b8", marginTop: 3 }}>{todayStr}</div>
-            </>
-          ) : (
-            <div style={{ fontSize: 10, color: "#a89090", lineHeight: 1.4 }}>{t.registerPeriod}</div>
+        {/* Texto central */}
+        <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", textAlign:"center", pointerEvents:"none", width:(R-TRACK-4)*2-12 }}>
+          {currentDay ? (<>
+            <div style={{ fontSize:36, fontWeight:800, color:centerColor, lineHeight:1 }}>{centerNum !== null ? Math.abs(centerNum) : "—"}</div>
+            <div style={{ fontSize:10, color:"#a89090", fontWeight:600, marginTop:3, lineHeight:1.3 }}>{centerLabel}</div>
+            <div style={{ fontSize:9, color:"#c8b8b8", marginTop:4 }}>{todayStr}</div>
+          </>) : (
+            <div style={{ fontSize:10, color:"#a89090", lineHeight:1.5 }}>{t.registerPeriod}</div>
           )}
         </div>
       </div>
 
-      {/* Info del día que toca la bolita */}
-      <div style={{ minHeight: 32, textAlign: "center", transition: "all 0.3s" }}>
-        {isDragging || dragDay !== null ? (
-          <div style={{ fontSize: 12, color: displayColor, fontWeight: 700 }}>
-            {displayLabel}
-            {displayDate && <span style={{ color: "#a89090", fontWeight: 400, marginLeft: 6 }}>· {displayDate}</span>}
-          </div>
-        ) : (
-          <div style={{ fontSize: 10, color: "#c8b8b8" }}>
-            {lang==="en"?"Drag the dot to explore":lang==="pt"?"Arraste o ponto para explorar":lang==="it"?"Trascina il punto per esplorare":"Arrastra la bolita para explorar"}
-          </div>
-        )}
+      {/* Leyenda */}
+      <div style={{ display:"flex", gap:12, fontSize:10, color:"#a89090" }}>
+        <span><span style={{ background:"#f5b8c4", borderRadius:4, padding:"1px 6px", marginRight:3 }}> </span>{lang==="en"?"Period":lang==="pt"?"Regra":lang==="it"?"Ciclo":"Regla"}</span>
+        <span><span style={{ background:"#e8849a", borderRadius:4, padding:"1px 6px", marginRight:3 }}> </span>{lang==="en"?"Ovulation":lang==="pt"?"Ovulação":lang==="it"?"Ovulazione":"Ovulación"}</span>
+        <span><span style={{ background:"#f9c8d8", borderRadius:4, padding:"1px 6px", marginRight:3 }}> </span>{lang==="en"?"Fertile":lang==="pt"?"Fértil":lang==="it"?"Fertile":"Fértil"}</span>
       </div>
     </div>
   );
@@ -1624,7 +1546,7 @@ export default function App() {
           </span>
         </div>
         <div style={S.circleWrap}>
-          <CycleWheel entries={entries} cycleLength={cycleLength} today={today} t={t} lang={lang} activePeriod={activePeriod} phaseInfo={phaseInfo} />
+          <CycleWheel entries={entries} cycleLength={cycleLength} today={today} t={t} lang={lang} activePeriod={activePeriod} />
         </div>
 
         <div style={S.actionRow}>
